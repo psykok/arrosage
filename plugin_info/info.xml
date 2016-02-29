@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+    <id>arrosage</id>
+    <name>arrosage</name>
+    <licence>AGPL</licence>
+    <author>psykok</author>
+    <require>2.1</require>
+    <category>automation protocol</category>
+</info>
