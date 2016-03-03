@@ -16,12 +16,7 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
-include_file('core', 'authentification', 'php');
-if (!isConnect()) {
-    include_file('desktop', '404', 'php');
-    die();
-}
+require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+include_file('core', 'arrosage', 'class', 'arrosage');
 ?>
-
 
