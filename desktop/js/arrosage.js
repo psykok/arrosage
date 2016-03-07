@@ -64,9 +64,9 @@ function addCmdToTable(_cmd) {
     tr += '<td>';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="id" style="display : none;">';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="name"></td>';
-    tr += '<td><input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="duration" placeholder="00:00"></td>';
 
     tr += '<td><input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="startTime" placeholder="00:00"></td>';
+    tr += '<td><input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="duration" placeholder="00"></td>';
 
     tr += '<td>';
     tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbDay1" type="checkbox" name="startDays" id="mon" value="1">L</label>';
