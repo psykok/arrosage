@@ -150,6 +150,18 @@ foreach (object::all() as $object) {
               </div>
 
 
+             <div class="form-group">
+                    <label class="col-sm-2 control-label">{{Commande Status}}</label>
+                    <div class="col-sm-6">
+
+                            <input class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="zoneStatus" placeholder="{{Nom Commande Status }}" style="margin-bottom : 5px;width : 300px; display : inline-block;">
+                            <a class="btn btn-default btn-sm cursor listEquipementInfo" data-input="infoName" style="margin-left : 5px;"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>
+
+                    </div>
+
+              </div>
+
+
 
 
 

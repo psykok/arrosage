@@ -15,18 +15,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-$('.eqLogicAttr[data-l1key=configuration][data-l2key=sendMode]').on('change', function () {
-    $('.sendMode').hide();
-    $('.sendMode.' + $(this).value()).show();
-});
-
-$("#table_cmd").delegate(".listEquipementInfo", 'click', function () {
-    var el = $(this);
-    jeedom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
-        var calcul = el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=' + el.data('input') + ']');
-        calcul.atCaret('insert', result.human);
-    });
-});
 /*
  $("#arrosage").delegate(".listEquipementAction", 'click', function () {
     var el = $(this);
