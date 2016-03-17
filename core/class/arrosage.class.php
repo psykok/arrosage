@@ -22,11 +22,69 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 
 class arrosage extends eqLogic {
+
   public static function cron() {
-     log::add('arrosage', 'info','log start' );
+	log::add('arrosage', 'info','log start' );
 
       foreach (eqLogic::byType('arrosage') as $eqLogic) {
 //     	log::add('arrosage', 'info','eqLogic : ' . $eqLogic->getHumanName().', id='.$eqLogic->getId());
+	
+	$winterStatus = $eqLogic->getConfiguration('winterMode');
+	$rainStopStatus = $eqLogic->getConfiguration('rainStop');
+	$windStopStatus = $eqLogic->getConfiguration('windStop');
+	$moistureStopStatus = $eqLogic->getConfiguration('moistureStop');
+	
+	$stopTask = 0;
+
+
+        //check if winter mode has been activated                                 
+	if ( $winterStatus == 1 ){
+                $stopTask = 1;
+        }
+	//check if the rain control has been activated
+	if ( $rainStopStatus == 1 ){
+		 //$rainSensorID = trim(config::byKey('rainSensor','arrosage'),"#");
+
+                $cmd_device=cmd::byId(trim(config::byKey('rainSensor','arrosage'),"#"));
+                if ( $cmd_device->getConfiguration('value') == 1){
+                         $stopTask = 1;
+                }
+        }                                                                                                                                                                                                                                    
+        //check if the wind crontrol has been activated
+        if ( $windStopStatus == 1 ){
+                $cmd_device=cmd::byId(trim(config::byKey('windSensor','arrosage'),"#"));
+		
+		//check if the current wind speed if under the max speed
+		if($cmd_device->execCmd() > $eqLogic->getConfiguration('windSpeedMax')){
+			$stopTask = 1;
+		}
+        }
+
+	//check if the moisture control has been activated
+	if ( $windStopStatus == 1 ){
+		$cmd_device=cmd::byId(trim($eqLogic->getConfiguration('moistureSensor'),"#"));
+		
+		$moistureValue=$cmd_device->getConfiguration('value');
+		$moistureMaxValue=$eqLogic->getConfiguration('moistureMax');
+		$moistureMinValue=$eqLogic->getConfiguration('moistureMin');
+
+		if ( $moistureValue > $moistureMaxValue ){
+			$stopTask = 1;
+		}
+	}
+
+
+        //check if an interrption has been detected
+        if ( $StopTask == 1 ){
+		$cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneStatus'),"#"));
+
+                if ( $cmd_device->getConfiguration('value') == 1){
+                        $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));
+                        $cmd_device->execute();
+                }
+                return 1;
+        }
+
 
      	foreach (cmd::byEqLogicId($eqLogic->getId()) as $cmd_def) {
 //          log::add('arrosage', 'info','cmd : '.$cmd_def->getHumanName() );
@@ -155,6 +213,7 @@ class arrosage extends eqLogic {
 	}
 	$replace['#cmd_list#'] = $cmd_list;
 
+	//check if the valve status
 	if ( $cmd_device->getConfiguration('value') == 1){	
 	   $replace['#cmd_stat#'] = 'icon_sprinkler2_on';
 	}else {
@@ -162,10 +221,68 @@ class arrosage extends eqLogic {
 	}
 
 
+        //check if the rain dectection is activated
+        if ( $this->getConfiguration('winterMode') == 0 ){
+           $replace['#winter_stat#'] = 'off';
+        }else{
+           $replace['#winter_stat#'] = 'on_red';
+        }
+
+
+	//check if the rain dectection is activated
+	if ( $this->getConfiguration('rainStop') == 0 ){	
+	   $replace['#rain_stat#'] = 'off';
+	}else{	
+	   $replace['#rain_stat#'] = 'on';
+	}
+
+	//check if the wind detection is activated
+        if ( $this->getConfiguration('windStop') == 0 ){
+           $replace['#wind_stat#'] = 'off';
+        }else{
+           $replace['#wind_stat#'] = 'on';
+        }
+
+	//check if the moisture detection is activated
+        if ( $this->getConfiguration('moistureStop') == 0 ){
+           $replace['#moisture_stat#'] = 'off';
+        }else{
+           $replace['#moisture_stat#'] = 'on';
+        }
+
 	$html = template_replace($replace, getTemplate('core', $_version, 'current', 'arrosage'));
        // cache::set('arrosageWidget' . $_version . $this->getId(), $html, 0);
         return $html;
   }
+
+	public function preSave() {
+
+                if ($this->getConfiguration('moistureStop') == 1){
+                        $moistureMaxValue = $this->getConfiguration('moistureMax');
+                        $moistureMinValue = $this->getConfiguration('moistureMin');
+
+                        if ($moistureMinValue < 0 || $moistureMinValue > $moistureMaxValue){
+                                throw new Exception(__('L\'humidité min doit etre superieur a 0% et inférieur à l\'humidité max', __FILE__));
+                        }
+                        if ($moistureMaxValue > 100 || $moistureMaxValue <  $moistureMinValue){
+                                throw new Exception(__('L\'humidité max doit etre inférieur a 100% et superieur à l\'humidité min', __FILE__));
+                        }
+                }
+                        log::add('arrosage', 'info','wind stop before'.$this->getConfiguration('windStop'));
+               if ($this->getConfiguration('windStop') == 1){
+
+                        $windMaxValue = $this->getConfiguration('windSpeedMax');
+                        log::add('arrosage', 'info','wind stop ok: '.$windMaxValue );
+
+                        if (  $windMaxValue < 1 ){
+                                throw new Exception(__('La vitesse du vent max doit être superieur a 0km/h ' , __FILE__));
+
+                        }
+
+                }
+
+
+	}
 }
 
 class arrosageCmd extends cmd {
@@ -200,7 +317,6 @@ class arrosageCmd extends cmd {
 		if ($dayStat == 0) {
 			throw new Exception(__('Un jour doit etre selectionné', __FILE__));
 		}
-
 
 	}
 
