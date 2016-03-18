@@ -24,7 +24,7 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 class arrosage extends eqLogic {
 
   public static function cron() {
-	log::add('arrosage', 'info','log start' );
+//	log::add('arrosage', 'info','log start' );
 
       foreach (eqLogic::byType('arrosage') as $eqLogic) {
 //     	log::add('arrosage', 'info','eqLogic : ' . $eqLogic->getHumanName().', id='.$eqLogic->getId());
@@ -118,11 +118,6 @@ class arrosage extends eqLogic {
           $stopHour = substr($stopTime,0,$pos);
           $stopMin = substr($stopTime,-$pos);     
 
-  //        log::add('arrosage', 'info','startday : '.$startDay );
-  //        log::add('arrosage', 'info','startHour : '.$startHour );
-  //        log::add('arrosage', 'info','startMin : '.$startMin );
-  //        log::add('arrosage', 'info','stopHour : '.$stopHour ); 
-  //        log::add('arrosage', 'info','stopMin : '.$stopMin );
   //        $startMin = "*";
   //        $startHour = "*";
  
@@ -140,16 +135,11 @@ class arrosage extends eqLogic {
                 $c = new Cron\CronExpression($startCron, new Cron\FieldFactory);
                 if ($c->isDue()) {
                         try {
-                           /*$eqLogic->refresh();*/
-  
                           // log::add('arrosage', 'info','Cron added '.$startCron );
-			  log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
+			  //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
 			       $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOn'),"#"));
 				$cmd_device->execute();
-/*
-		           $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));
-                                $cmd_device->execute();
- 			*/
+
                         } catch (Exception $exc) {
                                 log::add('arrosage', 'error', __('Erreur pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $exc->getMessage());
                         }
@@ -164,7 +154,7 @@ class arrosage extends eqLogic {
 
   		$cStop = new Cron\CronExpression($stopCron, new Cron\FieldFactory);
                 if ($cStop->isDue()) {                                                                                                                          
-                        log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOff')." at ".$stopTime );
+                        //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOff')." at ".$stopTime );
                            $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));                                                              
                                 $cmd_device->execute();
                 } 
@@ -201,10 +191,7 @@ class arrosage extends eqLogic {
 
         foreach (cmd::byEqLogicId($this->getId()) as $cmd_def) {
 //          log::add('arrosage', 'info','dashboard cmd : '.$cmd_def->getHumanName() );
-/*
-     	   $replace['#cmd_id#'] = $cmd_def->getId();
-           $replace['#cmd_uid#'] = $cmd_def->getId();
-*/
+ 
            $cmd_name = $cmd_def->getName();
            $cmd_start = $cmd_def->getConfiguration('startTime');
            $cmd_duration = $cmd_def->getConfiguration('duration');
@@ -219,7 +206,6 @@ class arrosage extends eqLogic {
 	}else {
            $replace['#cmd_stat#'] = 'icon_sprinkler2_off';
 	}
-
 
         //check if the rain dectection is activated
         if ( $this->getConfiguration('winterMode') == 0 ){
@@ -257,6 +243,7 @@ class arrosage extends eqLogic {
 
 	public function preSave() {
 
+		//check if the moisture control has been activated and if the max and min have been defined
                 if ($this->getConfiguration('moistureStop') == 1){
                         $moistureMaxValue = $this->getConfiguration('moistureMax');
                         $moistureMinValue = $this->getConfiguration('moistureMin');
@@ -268,11 +255,11 @@ class arrosage extends eqLogic {
                                 throw new Exception(__('L\'humidité max doit etre inférieur a 100% et superieur à l\'humidité min', __FILE__));
                         }
                 }
-                        log::add('arrosage', 'info','wind stop before'.$this->getConfiguration('windStop'));
+
+		//check if the wind control has been activated and if the max speed has been defnied
                if ($this->getConfiguration('windStop') == 1){
 
                         $windMaxValue = $this->getConfiguration('windSpeedMax');
-                        log::add('arrosage', 'info','wind stop ok: '.$windMaxValue );
 
                         if (  $windMaxValue < 1 ){
                                 throw new Exception(__('La vitesse du vent max doit être superieur a 0km/h ' , __FILE__));
@@ -290,22 +277,26 @@ class arrosageCmd extends cmd {
  	public function preSave() {
 		$this->setType('action');
 		$this->setSubType('other');
+
+		//check if the duration of the task is set
 		if ($this->getConfiguration('duration') == '') {
 			throw new Exception(__('La duree ne peut pas etre null', __FILE__));
 		}
 
 
-
+		//check if the start time is set
                 if ($this->getConfiguration('startTime') == '') {
                         throw new Exception(__('L\'heure de début ne peut pas etre null', __FILE__));
                 }
+
+		//check if the time is set in the right format
 		$pos = strpos($this->getConfiguration('startTime'),':');
 
 		if ($pos === false) {
                         throw new Exception(__('L\'heure de debut doit etre au format 00:00', __FILE__));
                 }
 
-	
+		//check if a starteup day has been selected	
    		$dayStat = 0;
 		for ($i = 0;$i <= 7; $i++)
 		{
