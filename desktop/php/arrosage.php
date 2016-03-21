@@ -153,13 +153,13 @@ foreach (object::all() as $object) {
                     <div class="col-sm-2">
                     <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='uvStop' />
                     </div>
-
+<!--
                      <div class="col-sm-2">
                     <label class="control-label" style="display : inline-block;">{{Min : }}</label>
                     <input class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="uvMin" placeholder="{{10}}" style="margin-bottom : 5px;width : 45px; display : inline-block;">
                      <label class="control-label" style="display : inline-block;">{{%}}</label>
                     </div>
-
+-->
 
 
 

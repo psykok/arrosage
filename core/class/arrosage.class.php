@@ -33,6 +33,7 @@ class arrosage extends eqLogic {
 	$rainStopStatus = $eqLogic->getConfiguration('rainStop');
 	$windStopStatus = $eqLogic->getConfiguration('windStop');
 	$moistureStopStatus = $eqLogic->getConfiguration('moistureStop');
+	$uvStopStatus =  $eqLogic->getConfiguration('uvStop');
 	
 	$stopTask = 0;
 
@@ -61,7 +62,7 @@ class arrosage extends eqLogic {
         }
 
 	//check if the moisture control has been activated
-	if ( $windStopStatus == 1 ){
+	if ( $moistureStopStatus == 1 ){
 		$cmd_device=cmd::byId(trim($eqLogic->getConfiguration('moistureSensor'),"#"));
 		
 		$moistureValue=$cmd_device->getConfiguration('value');
@@ -72,6 +73,23 @@ class arrosage extends eqLogic {
 			$stopTask = 1;
 		}
 	}
+
+	//check if uv crontole has been activated
+        if ( $uvStopStatus == 1 ){
+                $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('uvSensor'),"#"));
+
+                $uvValue=$cmd_device->getConfiguration('value');
+                $uvMaxValue=$eqLogic->getConfiguration('uvMax');
+//                $moistureMinValue=$eqLogic->getConfiguration('uvMin');
+
+                if ( $uvValue > $uvMaxValue ){
+                        $stopTask = 1;
+                }
+        }
+
+
+
+
 
 
         //check if an interrption has been detected
