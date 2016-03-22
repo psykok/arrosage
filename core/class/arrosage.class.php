@@ -24,7 +24,7 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 class arrosage extends eqLogic {
 
   public static function cron() {
-//	log::add('arrosage', 'info','log start' );
+	log::add('arrosage', 'info','log start' );
 
       foreach (eqLogic::byType('arrosage') as $eqLogic) {
 //     	log::add('arrosage', 'info','eqLogic : ' . $eqLogic->getHumanName().', id='.$eqLogic->getId());
@@ -45,8 +45,10 @@ class arrosage extends eqLogic {
 	//check if the rain control has been activated
 	if ( $rainStopStatus == 1 ){
 		 //$rainSensorID = trim(config::byKey('rainSensor','arrosage'),"#");
-
                 $cmd_device=cmd::byId(trim(config::byKey('rainSensor','arrosage'),"#"));
+
+                //log::add('arrosage', 'info','eqLogic : ' . $cmd_device->getid());
+
                 if ( $cmd_device->getConfiguration('value') == 1){
                          $stopTask = 1;
                 }
@@ -54,7 +56,7 @@ class arrosage extends eqLogic {
         //check if the wind crontrol has been activated
         if ( $windStopStatus == 1 ){
                 $cmd_device=cmd::byId(trim(config::byKey('windSensor','arrosage'),"#"));
-		
+
 		//check if the current wind speed if under the max speed
 		if($cmd_device->execCmd() > $eqLogic->getConfiguration('windSpeedMax')){
 			$stopTask = 1;
@@ -90,16 +92,21 @@ class arrosage extends eqLogic {
 
 
 
-
-
         //check if an interrption has been detected
-        if ( $StopTask == 1 ){
-		$cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneStatus'),"#"));
+        if ( $stopTask == 1 ){
 
+		$cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneStatus'),"#"));
+		//check if the valve is open
                 if ( $cmd_device->getConfiguration('value') == 1){
+			//close the valve
                         $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));
                         $cmd_device->execute();
+			
+			//close the master valve
+                	$eqLogic->manageMasterValve('Off');
+
                 }
+
                 return 1;
         }
 
@@ -157,6 +164,8 @@ class arrosage extends eqLogic {
 			  //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
 			       $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOn'),"#"));
 				$cmd_device->execute();
+				
+				manageMasterValve('On');
 
                         } catch (Exception $exc) {
                                 log::add('arrosage', 'error', __('Erreur pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $exc->getMessage());
@@ -173,8 +182,11 @@ class arrosage extends eqLogic {
   		$cStop = new Cron\CronExpression($stopCron, new Cron\FieldFactory);
                 if ($cStop->isDue()) {                                                                                                                          
                         //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOff')." at ".$stopTime );
-                           $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));                                                              
-                                $cmd_device->execute();
+                        $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));                                                              
+                        $cmd_device->execute();
+
+			 manageMasterValve('Off');
+
                 } 
  	     } catch (Exception $exc) {                                                                                                                         
                      log::add('arrosage', 'error', __('Expression cron non valide pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $stopCron);
@@ -185,8 +197,22 @@ class arrosage extends eqLogic {
 
      	}
      }
-  }
+ }
 
+  // function to open and close the master valve
+  protected function manageMasterValve($valveCMD) {
+
+	 log::add('arrosage', 'info','mastervalve : in');
+	 if ( config::byKey('masterValve','arrosage')  == 1){
+		
+		 log::add('arrosage', 'info','mastervalve :'.$valveCMD);
+	         //close the master valve
+	         $cmd_device=cmd::byId(trim(config::byKey('masterValve'.valveCMD,'arrosage'),"#"));
+	         $cmd_device->execute();
+         }
+
+
+  }
 
   public function toHtml($_version = 'dashboard') {
       if ($this->getIsEnable() != 1) {
