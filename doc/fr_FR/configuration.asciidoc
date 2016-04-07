@@ -2,12 +2,12 @@
 === Configuration du plugin
 image::../images/arrosage_plugin.png[]
 
-La Configuration du plugin permet de définir les équipements suivant si vous en êtes équipé.
-- Sonde de pluie : information binaire
-- Sonde vent : information provenant du plugin weather ou d'un capteur
-- Master vanne On : commande permettant d'ouvrir la vanne principale
-- Master Vanne Off : commande permettant de fermer la vanne principale
-- Master Vanne Status : retour d’état de la vanne principal
+La Configuration du plugin permet de définir les équipements suivant si vous en êtes équipé. +
+- Sonde de pluie : information binaire +
+- Sonde vent : information provenant du plugin weather ou d'un capteur +
+- Master vanne On : commande permettant d'ouvrir la vanne principale +
+- Master Vanne Off : commande permettant de fermer la vanne principale +
+- Master Vanne Status : retour d’état de la vanne principal +
 
 
 === Configuration des zones
@@ -15,23 +15,23 @@ image::../images/arrosage_zone1.png[]
 image::../images/arrosage_zone1_conf.png[]
 
 
-Dans chaque zone il est possible de définir plusieurs cycle d'arrosage avec un heure de début, une durée et un jour d'execution.
+Dans chaque zone il est possible de définir plusieurs cycle d'arrosage avec un heure de début, une durée et un jour d'execution. +
 
-Les cycles sont dépendant des parametres d'arrosage que l'on a définie comme la vitesse du vent, la pluie...
-Si l'un de ces parametres est vérifié pendant ou avant l'execution d'un cycle ce dernier est stoppé ou pas exécuté.
+Les cycles sont dépendant des parametres d'arrosage que l'on a définie comme la vitesse du vent, la pluie... +
+Si l'un de ces parametres est vérifié pendant ou avant l'execution d'un cycle ce dernier est stoppé ou pas exécuté. +
 
 
-Les différents parametre d'arrosage sont les suivant:
-* Hivernage : permet de mettre la zone en hivernage, tous les cycles sont stoppés
-* Arrêt si pluie : permet de stopper l'arrosage si de la pluie est détecté
-* Arrêt si vent : si la vitesse du vent est supérieur a la vitesse définie, l'arrosage est stoppé
-* Arrêt humidité : si l'humidité est supérieur au seuil fixé, l'arrosage est stoppé
-* Sonde humidité : definition de l’équipement pour la sonde d'humidité
-* Arret UV : si le taux d'uv est supérieur au seil fixé, l'arrosage est stoppé
-* Sonde UV : definition de l’équipement pour la sonde UV
-* Commande On : commande d'ouverture de la vanne pour cette zone
-* Commande Off : commande de fermeture de la vanne pour cette zone
-* Commande Status : retour d’état de la vanne
+Les différents parametre d'arrosage sont les suivant: +
+* Hivernage : permet de mettre la zone en hivernage, tous les cycles sont stoppés +
+* Arrêt si pluie : permet de stopper l'arrosage si de la pluie est détecté +
+* Arrêt si vent : si la vitesse du vent est supérieur a la vitesse définie, l'arrosage est stoppé +
+* Arrêt humidité : si l'humidité est supérieur au seuil fixé, l'arrosage est stoppé +
+* Sonde humidité : definition de l’équipement pour la sonde d'humidité +
+* Arret UV : si le taux d'uv est supérieur au seil fixé, l'arrosage est stoppé +
+* Sonde UV : definition de l’équipement pour la sonde UV +
+* Commande On : commande d'ouverture de la vanne pour cette zone +
+* Commande Off : commande de fermeture de la vanne pour cette zone +
+* Commande Status : retour d’état de la vanne +
 
 === Dashboard 
 image::../images/arrosage_off.png[]
