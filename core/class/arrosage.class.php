@@ -35,6 +35,7 @@ class arrosage extends eqLogic {
 	$moistureStopStatus = $eqLogic->getConfiguration('moistureStop');
 	$uvStopStatus =  $eqLogic->getConfiguration('uvStop');
 	
+	
 	$stopTask = 0;
 
 
@@ -116,7 +117,15 @@ class arrosage extends eqLogic {
      	
 	  $duration = $cmd_def->getConfiguration('duration');
 	  $startTime =  $cmd_def->getConfiguration('startTime');
+	  $disableTask = $cmd_def->getConfiguration('cbDisable');
           $startDay = "";
+	  $startMonth = "";
+
+	  //if the task is disable exit
+	  if ( $disableTask == 1){
+		return 1;
+	 }
+
 
           //log::add('arrosage', 'info','real duration : '.$duration );
 
@@ -132,6 +141,19 @@ class arrosage extends eqLogic {
                  }
           }
 
+          //concatenation of the moth we need to start the cron job
+	  for ($i = 1; $i <= 12 ;$i++)
+          {
+                 if ($cmd_def->getConfiguration('cbMonth'.$i) == 1) {
+                   if ($startMonth != "")
+                   {
+                         $startMonth = $startMonth .",";
+                   }
+                   $startMonth = $startMonth . $i;
+                 }
+          }
+
+
 	  //creation of the stopTime
           $stopTime = date('H:i',strtotime($startTime . '+ '.$duration .' minute'));
 
@@ -146,13 +168,16 @@ class arrosage extends eqLogic {
   //        $startMin = "*";
   //        $startHour = "*";
  
-          $startMonth = "*";
+ //       $startMonth = "*";
           $startDayOfMonth = "*";
    //      $startDay = "*";
  
           $startCron = $startMin." ".$startHour." ".$startDayOfMonth." ".$startMonth." ".$startDay;
 	  $stopCron = $stopMin." ".$stopHour." * * *";  
   
+
+	//log::add('arrosage', 'info','Cron added '.$startCron );
+
           if ($eqLogic->getIsEnable() == 1 && $startCron != '') {
 	     //cron to open the valve
              try {
@@ -228,7 +253,7 @@ class arrosage extends eqLogic {
 */
         $html_forecast = '';
         $replace['#id#'] = $this->getId();
-	 $replace['#eqLink#'] = $this->getLinkToConfiguration();
+	$replace['#eqLink#'] = $this->getLinkToConfiguration();
 	$replace['#zoneName#'] = $this->getName();
 
 	$cmd_device=cmd::byId(trim($this->getConfiguration('zoneStatus'),"#"));
@@ -352,6 +377,20 @@ class arrosageCmd extends cmd {
 		if ($dayStat == 0) {
 			throw new Exception(__('Un jour doit etre selectionné', __FILE__));
 		}
+
+       	       //check if a starteup month  has been selected
+                $monthStat = 0;
+                for ($i = 0;$i <= 12; $i++)
+                {
+
+                        if ($this->getConfiguration('cbMonth' .$i) != 0) {
+                                $monthStat++;
+                        }
+                }
+                if ($monthStat == 0) {
+                        throw new Exception(__('Un mois doit etre selectionné', __FILE__));
+                }
+
 
 	}
 

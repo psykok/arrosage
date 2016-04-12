@@ -75,6 +75,28 @@ function addCmdToTable(_cmd) {
 */ 
 
 
+
+
+    tr += '<td>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth1" type="checkbox" name="startMonth" id="jan" value="1">JAN</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth2" type="checkbox" name="startMonth" id="dev" value="2">FEV</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth3" type="checkbox" name="startMonth" id="mar" value="3">MAR</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth4" type="checkbox" name="startMonth" id="avr" value="4">AVR</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth5" type="checkbox" name="startMonth" id="mai" value="5">MAI</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth6" type="checkbox" name="startMonth" id="jun" value="6">JUN</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth7" type="checkbox" name="startMonth" id="jul" value="7">JUL</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth8" type="checkbox" name="startMonth" id="aou" value="8">AOU</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth9" type="checkbox" name="startMonth" id="sep" value="9">SEP</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth10" type="checkbox" name="startMonth" id="oct" value="10">OCT</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth11" type="checkbox" name="startMonth" id="nov" value="11">NOV</label>';
+    tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbMonth12" type="checkbox" name="startMonth" id="dec" value="12">DEC</label>';
+    tr += '</td>';
+
+
+   tr += '<td>';
+    tr += '<input class="cmdAttr" data-l1key="configuration" data-l2key="cbDisable" type="checkbox" name="taskDisable"  value="1">';
+  tr += '</td>';
+
  
     tr += '<td>';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="action" style="display : none;">';

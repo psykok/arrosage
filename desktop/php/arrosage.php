@@ -236,7 +236,7 @@ foreach (object::all() as $object) {
 <table id="table_cmd" class="table table-bordered table-condensed">
     <thead>
         <tr>
-    <th>{{Nom}}</th><th>{{Heure début}}</th><th>{{Durée}}</th><th>{{Jours}}</th><th></th>
+    <th>{{Nom}}</th><th>{{Heure début}}</th><th>{{Durée}}</th><th>{{Jours}}</th><th>{{Mois}}</th><th>{{Inactive}}</th><th></th>
         </tr>
     </thead>
     <tbody>
