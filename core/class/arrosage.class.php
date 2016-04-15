@@ -19,7 +19,7 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
-
+include_file('core', 'arrosage_master', 'class', 'arrosage');
 
 class arrosage extends eqLogic {
 
@@ -238,6 +238,35 @@ class arrosage extends eqLogic {
 
 
   }
+  
+  // function to create the master controle panel
+  public function createMasterControl(){
+	if(count(eqLogic::byType('arrosage_master'))){
+		 log::add('arrosage', 'info','master controle exist');
+	}
+	else{
+		$eqLogic = new arrosage_master();
+    		$eqLogic->setEqType_name('arrosage_master');
+    		$eqLogic->setName('Centrale');
+    		$eqLogic->setLogicalId($this->getId().'_centrale');
+    		$eqLogic->setObject_id($this->getObject_id());
+    		$eqLogic->setIsVisible(1);
+    		$eqLogic->setIsEnable(1);
+		$eqLogic->save();
+		log::add('arrosage', 'info','master controle doesn\'t exist');	
+	}
+
+
+
+  }
+  public function postSave(){
+	$this->createMasterControl();
+
+  }
+
+
+
+
 
   public function toHtml($_version = 'dashboard') {
       if ($this->getIsEnable() != 1) {
@@ -305,7 +334,7 @@ class arrosage extends eqLogic {
            $replace['#moisture_stat#'] = 'on';
         }
 
-	$html = template_replace($replace, getTemplate('core', $_version, 'current', 'arrosage'));
+	$html = template_replace($replace, getTemplate('core', $_version, 'zone', 'arrosage'));
        // cache::set('arrosageWidget' . $_version . $this->getId(), $html, 0);
         return $html;
   }
@@ -344,6 +373,10 @@ class arrosage extends eqLogic {
 class arrosageCmd extends cmd {
 
  	public function preSave() {
+
+	  //	log::add('arrosage', 'info','type cmd : '. $this->getEqType_name() );
+
+			
 		$this->setType('action');
 		$this->setSubType('other');
 
@@ -390,7 +423,6 @@ class arrosageCmd extends cmd {
                 if ($monthStat == 0) {
                         throw new Exception(__('Un mois doit etre selectionné', __FILE__));
                 }
-
 
 	}
 

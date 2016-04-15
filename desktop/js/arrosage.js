@@ -25,6 +25,9 @@
     });
 });
 */
+
+
+
 $("#arrosage_config").delegate(".listEquipementAction", 'click', function() {
     var el = $(this);
     jeedom.cmd.getSelectModal({cmd: {type: 'action'}}, function(result) {

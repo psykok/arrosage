@@ -1,0 +1,51 @@
+<div class="eqLogic-widget eqLogic" style="width: 350px;background-color: #background_color#; #style#" data-eqLogic_id="#id#" data-eqLogic_cmd_uid="#uid#" data-version="dashboard" >
+ <center class="widget-name"><strong><a href="#eqLink#" style="font-size : 1.1em;"> #zoneName# </a></strong></center>
+<!--
+	<div class="row" style="margin : 4px">
+		<center>
+		<span style="font-weight : bold; Cursor:default">Aujourd'hui</span>
+		<i class="fa fa-cloud fa-lg today" style="color : #95a5a6; Cursor:default"></i>
+		<br/>
+		<span style="font-weight : bold; Cursor:default">Demain</span>
+		<i class="fa fa-check fa-lg tomorrow" style="color : #95a5a6; Cursor:default"></i>
+		<br/>
+		</center>
+	</div>
+-->
+
+<center>
+<div class="cmd" data-type="info" data-subtype="binary" data-cmd_id="#cmd_id#" data-cmd_cmd_uid="#cmd_uid#">
+	<div  class="col-xs-4">
+                <img style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/standby.png"/> 
+
+
+	</div>
+	<div class="col-xs-4">
+		<img style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/delay.png"/>
+		<div style="font-weight: bold;font-size : 12px;">#delay_value# min</div>
+ <div class="input-group">
+		<input type="number" min="0" max="100" step="10" value="0" class="form-control input-sm" placeholder="Text input">
+<div class="input-group-addon input-sm">min</div>
+</div>  
+</div>  
+	</div>
+	<div class="col-xs-4">
+		<img style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/water.png"/>
+		<div style="font-weight: bold;font-size : 12px;">#water_value# %</div>
+	</div>
+</div>
+<span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#id#" data-cmd_uid="#uid#">
+    <a class="btn btn-sm btn-default action cmdName tooltips" title="#other_tooltips#" style="background-color:#cmdColor# !important;border-color : transparent !important;">#name_display#</a>
+    <script>
+        $('.cmd[data-cmd_uid=#uid#]:last .action').off('click').on('click', function () {
+            jeedom.cmd.execute({id: '#id#'});
+        });
+        if ($('.cmd[data-cmd_uid=#uid#]:last').prev().data('subtype') != undefined && $('.cmd[data-cmd_id=#id#]:last').prev().data('subtype') != 'other'
+                && $('.cmd[data-cmd_uid=#uid#]:last').prev().css('display') != 'block') {
+            $('.cmd[data-cmd_uid=#uid#]:last').prepend('<br/>');
+        }
+    </script>
+</span>
+</center>
+</div>
+
