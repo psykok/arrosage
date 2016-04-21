@@ -1,4 +1,4 @@
-<div class="col-lg-10 col-md-9 col-sm-8 eqLogic arrosage_master " style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
+<div class="col-lg-10 col-md-9 col-sm-8 eqLogic arrosage_tasker " style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
     <div class='row'>
         <div class="col-sm-6">
             <form class="form-horizontal">
@@ -38,41 +38,19 @@
 	 <div class="col-sm-6 " id="arrosage_config">
 	     <form class="form-horizontal">
 	        <fieldset>
-	               <legend>{{Configuration Centrale}}</legend>
-		       <div class="form-group">
-		                <label class="col-sm-2 control-label">{{Arrêt général}}</label>
-		                <div class="col-sm-6">
-		                    <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='masterStop' />
-		       		</div>
-		       </div>
+	               <legend>{{Configuration}}</legend>
 
-			<div class="form-group">
-		                <label class="col-sm-2 control-label">{{Coef arrosage : }}</label>
-        		 	<div class="col-sm-2">
-		        		<input class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="waterAdj" placeholder="{{100}}" style="margin-bottom : 5px;width : 45px; display : inline-block;">
-        				 <label class="control-label" style="display : inline-block;">{{%}}</label>
-	        		</div>
-                        </div>
-
-                        <div class="form-group">
-                        <label class="col-sm-2 control-label">{{Retard arrosage : }}</label>
-			<div class="col-sm-2">
-                                        <input class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="delayAdj" placeholder="{{0}}" style="margin-bottom : 5px;width : 45px; display : inline-block;">
-                                         <label class="control-label" style="display : inline-block;">{{min}}</label>
-                                </div>
-
-              		</div>
 	        </fieldset>
 	    </form>
 	</div>
 </div>
 
-<legend>{{Command}}</legend>
-<!--<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{command}}</a><br/><br/>-->
-<table id="table_cmd_master" class="table table-bordered table-condensed">
+<legend>{{Tache}}</legend>
+<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{Ajouter une commande}}</a><br/><br/>
+<table id="table_cmd_arrosage_tasker" class="table table-bordered table-condensed">
     <thead>
         <tr>
-    <th>{{Nom}}</th><th>{{option}}</th><th></th>
+    <th>{{Nom}}</th><th>{{Heure début}}</th><th>{{Zone}}</th><th>{{Jours}}</th><th>{{Mois}}</th><th>{{Inactive}}</th><th></th>
         </tr>
     </thead>
     <tbody>
@@ -81,11 +59,10 @@
 </table>
 
 
-
 <form class="form-horizontal">
     <fieldset>
         <div class="form-actions">
-<!--            <a class="btn btn-danger eqLogicAction" data-action="remove"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a>-->
+            <a class="btn btn-danger eqLogicAction" data-action="remove"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a>
             <a class="btn btn-success eqLogicAction" data-action="save"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
         </div>
     </fieldset>

@@ -14,38 +14,37 @@
 -->
 
 <center>
-<div class="cmd" data-type="info" data-subtype="binary" data-cmd_id="#cmd_id#" data-cmd_cmd_uid="#cmd_uid#">
+<div class="cmd" data-type="action" data-subtype="other" data-cmd_id="#id#" data-cmd_uid="#uid#">
 	<div  class="col-xs-4">
-                <img style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/standby.png"/> 
-
-
+                <img  class="standby" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/#standbyIcone#.png"/> 
 	</div>
 	<div class="col-xs-4">
-		<img style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/delay.png"/>
+		<img  class="delay" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/delay.png"/>
 		<div style="font-weight: bold;font-size : 12px;">#delay_value# min</div>
- <div class="input-group">
-		<input type="number" min="0" max="100" step="10" value="0" class="form-control input-sm" placeholder="Text input">
-<div class="input-group-addon input-sm">min</div>
-</div>  
-</div>  
 	</div>
 	<div class="col-xs-4">
-		<img style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/water.png"/>
+		<img  class="water" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/water.png"/>
 		<div style="font-weight: bold;font-size : 12px;">#water_value# %</div>
 	</div>
 </div>
-<span class="cmd" data-type="action" data-subtype="other" data-cmd_id="#id#" data-cmd_uid="#uid#">
-    <a class="btn btn-sm btn-default action cmdName tooltips" title="#other_tooltips#" style="background-color:#cmdColor# !important;border-color : transparent !important;">#name_display#</a>
+
+
+
     <script>
-        $('.cmd[data-cmd_uid=#uid#]:last .action').off('click').on('click', function () {
-            jeedom.cmd.execute({id: '#id#'});
-        });
-        if ($('.cmd[data-cmd_uid=#uid#]:last').prev().data('subtype') != undefined && $('.cmd[data-cmd_id=#id#]:last').prev().data('subtype') != 'other'
-                && $('.cmd[data-cmd_uid=#uid#]:last').prev().css('display') != 'block') {
-            $('.cmd[data-cmd_uid=#uid#]:last').prepend('<br/>');
-        }
+       
+        $('.cmd[data-cmd_id=#id#] .standby').on('click', function () {
+            jeedom.cmd.execute({id: '#standbyID#'});
+      });
+        $('.cmd[data-cmd_id=#id#] .delay').on('click', function () {
+            jeedom.cmd.execute({id: '#delayID#'});
+      });
+        $('.cmd[data-cmd_id=#id#] .water').on('click', function () {
+            jeedom.cmd.execute({id: '#waterID#'});
+      });
+
     </script>
-</span>
+
+
 </center>
 </div>
 

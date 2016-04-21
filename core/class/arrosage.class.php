@@ -20,11 +20,15 @@
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 include_file('core', 'arrosage_master', 'class', 'arrosage');
+include_file('core', 'arrosage_tasker', 'class', 'arrosage');
+
 
 class arrosage extends eqLogic {
 
   public static function cron() {
 	log::add('arrosage', 'info','log start' );
+	return 1;
+
 
       foreach (eqLogic::byType('arrosage') as $eqLogic) {
 //     	log::add('arrosage', 'info','eqLogic : ' . $eqLogic->getHumanName().', id='.$eqLogic->getId());
@@ -110,7 +114,6 @@ class arrosage extends eqLogic {
 
                 return 1;
         }
-
 
      	foreach (cmd::byEqLogicId($eqLogic->getId()) as $cmd_def) {
 //          log::add('arrosage', 'info','cmd : '.$cmd_def->getHumanName() );
@@ -256,11 +259,32 @@ class arrosage extends eqLogic {
 		log::add('arrosage', 'info','master controle doesn\'t exist');	
 	}
 
+  }
 
+
+ // function to create the master controle panel
+  public function createTasker(){
+        if(count(eqLogic::byType('arrosage_tasker'))){
+                 log::add('arrosage', 'info','tasker exist');
+        }
+        else{   
+                $eqLogic = new arrosage_tasker();
+                $eqLogic->setEqType_name('arrosage_tasker');
+                $eqLogic->setName('Tasker');
+                $eqLogic->setLogicalId($this->getId().'_tasker');
+                $eqLogic->setObject_id($this->getObject_id());
+                $eqLogic->setIsVisible(1);
+                $eqLogic->setIsEnable(1);
+                $eqLogic->save();
+                log::add('arrosage', 'info','tasker doesn\'t exist');
+        }
 
   }
+
+
   public function postSave(){
 	$this->createMasterControl();
+	$this->createTasker();
 
   }
 
@@ -281,11 +305,17 @@ class arrosage extends eqLogic {
         }
 */
         $html_forecast = '';
+	$cmd_list = '';
         $replace['#id#'] = $this->getId();
 	$replace['#eqLink#'] = $this->getLinkToConfiguration();
 	$replace['#zoneName#'] = $this->getName();
 
 	$cmd_device=cmd::byId(trim($this->getConfiguration('zoneStatus'),"#"));
+
+	foreach (cmd::byEqLogicId($this->getId()) as $cmd_def) {
+                        $replace['#'.$cmd_def->getLogicalId().'ID#'] =  $cmd_def->getId();
+                }
+
 
         foreach (cmd::byEqLogicId($this->getId()) as $cmd_def) {
 //          log::add('arrosage', 'info','dashboard cmd : '.$cmd_def->getHumanName() );
@@ -347,10 +377,10 @@ class arrosage extends eqLogic {
                         $moistureMinValue = $this->getConfiguration('moistureMin');
 
                         if ($moistureMinValue < 0 || $moistureMinValue > $moistureMaxValue){
-                                throw new Exception(__('L\'humidité min doit etre superieur a 0% et inférieur à l\'humidité max', __FILE__));
+                                throw new Exception(__('L\'humidité min doit être superieur à 0% et inférieur à l\'humidité max', __FILE__));
                         }
                         if ($moistureMaxValue > 100 || $moistureMaxValue <  $moistureMinValue){
-                                throw new Exception(__('L\'humidité max doit etre inférieur a 100% et superieur à l\'humidité min', __FILE__));
+                                throw new Exception(__('L\'humidité max doit être inférieur à 100% et superieur à l\'humidité min', __FILE__));
                         }
                 }
 
@@ -360,72 +390,115 @@ class arrosage extends eqLogic {
                         $windMaxValue = $this->getConfiguration('windSpeedMax');
 
                         if (  $windMaxValue < 1 ){
-                                throw new Exception(__('La vitesse du vent max doit être superieur a 0km/h ' , __FILE__));
+                                throw new Exception(__('La vitesse du vent max doit être superieur à 0km/h ' , __FILE__));
 
                         }
 
                 }
+	
 
+		//check if the duration is greater as 0	
+		$zoneDurationValue=$this->getConfiguration('zoneDuration');
+		if ( $zoneDurationValue < 0){
+			 throw new Exception(__('La durée doit être superieur à 0' , __FILE__));
+		}
+		
 
 	}
+/*
+   public function postUpdate(){                                                                                                                                                                     
+                $this->postInsert();                                                                                                                            
+        } 
+*/
+  	public function postInsert(){
+                if(count(cmd::byLogicalId('winter')) == 0) {
+			$this->createCustomCmd('winter');
+			$this->createCustomCmd('rain');
+			$this->createCustomCmd('wind');
+			$this->createCustomCmd('moisture');
+			$this->createCustomCmd('zoneAction');			
+                }
+
+
+        }
+
+	public function createCustomCmd($cmdName){
+		$masterCmd = new arrosageCmd();
+                $masterCmd->setName($cmdName);
+                $masterCmd->setLogicalId($cmdName);
+                $masterCmd->setEqLogic_id($this->id);
+                $masterCmd->setType('action');
+                $masterCmd->setSubType('other');
+                $masterCmd->save();
+	}
+
+
+	 //change winter option status                                                                                                                                   
+        public function doWinter(){                                                                                                                                                                     
+                //log::add('arrosage', 'info','command: winter' );
+		$this->changeOptionStatus('winterMode');
+        }    
+
+	//change rain option status                                                                                                                          
+        public function doRain(){                                                                                                                                                                     
+                //log::add('arrosage', 'info','command: rain' );                                                                                                 
+		$this->changeOptionStatus('rainStop');
+        }    
+
+	//change wind option status                                                                                                                             
+        public function doWind(){                                                                                                                                                                     
+                //log::add('arrosage', 'info','command: wind' );                                                                                                 
+		$this->changeOptionStatus('windStop');
+        }    
+
+	 //change moisture option status                                                                                                                              
+        public function doMoisture(){                                                                                                                                                                     
+                //log::add('arrosage', 'info','command: moisture' );                                                                                                 
+		$this->changeOptionStatus('moistureStop');
+        } 
+	public function doZoneAction(){
+                log::add('arrosage', 'info','command: zoneAction' );
+                //$this->changeOptionStatus('moistureStop');
+        }
+   
+	
+	//function to change the option status
+	public function changeOptionStatus($optionName){
+                $optionSatus=$this->getConfiguration($optionName);
+
+                if($optionSatus == 1){
+                        $this->setConfiguration($optionName,0);
+                }
+                else if($optionSatus == 0){
+                        $this->setConfiguration($optionName,1);
+                }
+                $this->save();
+                $this->refreshWidget();
+        }
+
+
 }
 
 class arrosageCmd extends cmd {
 
- 	public function preSave() {
-
-	  //	log::add('arrosage', 'info','type cmd : '. $this->getEqType_name() );
-
-			
-		$this->setType('action');
-		$this->setSubType('other');
-
-		//check if the duration of the task is set
-		if ($this->getConfiguration('duration') == '') {
-			throw new Exception(__('La duree ne peut pas etre null', __FILE__));
-		}
-
-
-		//check if the start time is set
-                if ($this->getConfiguration('startTime') == '') {
-                        throw new Exception(__('L\'heure de début ne peut pas etre null', __FILE__));
+        public function execute($_options = array()) {
+                if ($this->getLogicalId() == 'winter') {                                                                                                                                                 
+                        $this->getEqLogic()->doWinter();                                                                                                       
+                }                                                                                                                                                                                         
+                                                                                                                                                                
+                if ($this->getLogicalId() == 'rain') {                                                                                                                                                   
+                        $this->getEqLogic()->doRain();                                                                                                      
+                }                                                                                                                                                                                         
+                if ($this->getLogicalId() == 'wind') {                                                                                                         
+                        $this->getEqLogic()->doWind();                                                                                                                                                
+                }                                 
+                if ($this->getLogicalId() == 'moisture') {                                                                                                                                                    
+                        $this->getEqLogic()->doMoisture();                                                                                                      
+                }                                                                                                              
+                if ($this->getLogicalId() == 'zoneAction') {
+                        $this->getEqLogic()->doZoneAction();
                 }
-
-		//check if the time is set in the right format
-		$pos = strpos($this->getConfiguration('startTime'),':');
-
-		if ($pos === false) {
-                        throw new Exception(__('L\'heure de debut doit etre au format 00:00', __FILE__));
-                }
-
-		//check if a starteup day has been selected	
-   		$dayStat = 0;
-		for ($i = 0;$i <= 7; $i++)
-		{
-   			
-                	if ($this->getConfiguration('cbDay' .$i) != 0) {
-				$dayStat++;
-                	}	
-		}
-		if ($dayStat == 0) {
-			throw new Exception(__('Un jour doit etre selectionné', __FILE__));
-		}
-
-       	       //check if a starteup month  has been selected
-                $monthStat = 0;
-                for ($i = 0;$i <= 12; $i++)
-                {
-
-                        if ($this->getConfiguration('cbMonth' .$i) != 0) {
-                                $monthStat++;
-                        }
-                }
-                if ($monthStat == 0) {
-                        throw new Exception(__('Un mois doit etre selectionné', __FILE__));
-                }
-
-	}
-
-
-
+                                                                                                                                                                                          
+                return false;                                                                                                                                   
+        }   
 }

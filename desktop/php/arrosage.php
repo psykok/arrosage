@@ -19,6 +19,9 @@ $eqLogics = eqLogic::byType('arrosage');
 			 foreach (eqLogic::byType('arrosage_master') as $eqLogic) {
 				echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage_master"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
 			}
+			foreach (eqLogic::byType('arrosage_tasker') as $eqLogic) {
+                                echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage_tasker"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
+                        }
 		?>
            </ul>
        </div>
@@ -54,6 +57,15 @@ $eqLogics = eqLogic::byType('arrosage');
 		        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
 		        echo '</div>';
 		}
+
+                foreach (eqLogic::byType('arrosage_tasker') as $eqLogic) {
+                        echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+                        echo "<center>";
+                        echo '<img src="plugins/arrosage/doc/images/master_icon.png" height="105" width="95" />';
+                        echo "</center>";
+                        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
+                        echo '</div>';
+                }
 	?>
 </div>
 
@@ -76,7 +88,7 @@ $eqLogics = eqLogic::byType('arrosage');
 
 </div>
 
-<div class="col-lg-10 col-md-9 col-sm-8 arrosage  eqLogic" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
+<div class="col-lg-10 col-md-9 col-sm-8 arrosage eqLogic" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
     <div class='row'>
         <div class="col-sm-6">
             <form class="form-horizontal">
@@ -251,6 +263,15 @@ $eqLogics = eqLogic::byType('arrosage');
                     </div>
 
               </div>
+		<div class="form-group">
+                    <label class="col-sm-2 control-label">{{Durée}}</label>
+                    <div class="col-sm-2">
+                    <div class="input-group"  style="width : 150px;">
+                        <input class="eqLogicAttr form-control" type="number" min="0" step="5" data-l1key="configuration" data-l2key="zoneDuration" placeholder="{{0}}">
+                        <div class="input-group-addon">min</div>
+                    </div>
+		    </div>
+                </div>
 
 
 
@@ -260,20 +281,18 @@ $eqLogics = eqLogic::byType('arrosage');
         </fieldset>
     </form>
 </div>
-
 <legend>{{arrosage}}</legend>
-<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{Ajouter une sequence d'arrosage}}</a><br/><br/>
+<!--<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{command}}</a><br/><br/>-->
 <table id="table_cmd" class="table table-bordered table-condensed">
     <thead>
         <tr>
-    <th>{{Nom}}</th><th>{{Heure début}}</th><th>{{Durée}}</th><th>{{Jours}}</th><th>{{Mois}}</th><th>{{Inactive}}</th><th></th>
+    <th>{{Nom}}</th><th>{{option}}</th><th></th>
         </tr>
     </thead>
     <tbody>
 
     </tbody>
 </table>
-
 <form class="form-horizontal">
     <fieldset>
         <div class="form-actions">
@@ -285,6 +304,7 @@ $eqLogics = eqLogic::byType('arrosage');
 
 </div>
 	<?php include_file('desktop', 'arrosage_master', 'php', 'arrosage'); ?>
+        <?php include_file('desktop', 'arrosage_tasker', 'php', 'arrosage'); ?>
 </div>
 
 <?php

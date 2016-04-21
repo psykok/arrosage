@@ -14,18 +14,38 @@
 -->
 
 <center>
-<div class="cmd" data-type="info" data-subtype="binary" data-cmd_id="#cmd_id#" data-cmd_cmd_uid="#cmd_uid#">
+<div class="cmd" data-type="action" data-subtype="other" data-cmd_id="#id#" data-cmd_uid="#uid#">
 	<div>
-                <img style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/winter_#winter_stat#.png"/> 
-		<img style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/rain_#rain_stat#.png"/>
-		<img style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/wind_#wind_stat#.png"/>
-		<img style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/moisture_#moisture_stat#.png"/>
+                <img class="winter" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/winter_#winter_stat#.png"/> 
+		<img class="rain" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/rain_#rain_stat#.png"/>
+		<img class="wind" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/wind_#wind_stat#.png"/>
+		<img class="moisture" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/moisture_#moisture_stat#.png"/>
 	</div>
+
       <!--  <div style="font-weight: bold;font-size : 12px;#hideCmdName#">#cmd_name# : #cmd_start# for #cmd_duration# min</div>-->
-#cmd_list#
+	<img class="zoneAction" style="height:90px;width:90px; display: #visibilityImage#;" src="plugins/arrosage/core/template/images/#cmd_stat#.png"/>
 </div>
-	<img style="height:90px;width:90px; display: #visibilityImage#;" src="plugins/arrosage/core/template/images/#cmd_stat#.png"/>
+
 </center>
+<script>
+
+        $('.cmd[data-cmd_id=#id#] .winter').on('click', function () {
+            jeedom.cmd.execute({id: '#winterID#'});
+      });
+        $('.cmd[data-cmd_id=#id#] .rain').on('click', function () {
+            jeedom.cmd.execute({id: '#rainID#'});
+      });
+        $('.cmd[data-cmd_id=#id#] .wind').on('click', function () {
+            jeedom.cmd.execute({id: '#windID#'});
+      });
+        $('.cmd[data-cmd_id=#id#] .moisture').on('click', function () {
+            jeedom.cmd.execute({id: '#moistureID#'});
+      });
+	$('.cmd[data-cmd_id=#id#] .zoneAction').on('click', function () {
+            jeedom.cmd.execute({id: '#zoneActionID#'});
+      });	
+
+    </script>
 
 </div>
 

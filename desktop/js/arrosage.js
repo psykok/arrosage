@@ -46,18 +46,62 @@ $("#arrosage_config").delegate(".listEquipementInfo", 'click', function() {
     });
 });
 
-
-function addCmdToTable(_cmd) {
-    if (!isset(_cmd)) {
-        var _cmd = {configuration: {}};
+function addCmdToTable(_cmd) {                                                                                                                                                                          
+    if (!isset(_cmd)) {                                                                                                                                       
+        var _cmd = {configuration: {}};                                                                                                                                                                 
     }
+    if (!isset(_cmd.configuration)) {
+        _cmd.configuration = {};
+    }
+
+    if (init(_cmd.eqType) == 'arrosage_tasker') {
+        addCmdToTableArrosage(_cmd);
+    }else{                                                                                                                                                      
+        addCmdToTableArrosageMaster(_cmd);  
+    }                                                                                                                                                           
+//    $('#table_cmd tbody').append(init(_cmd.eqType));
+                                                                                                                                                                                                  
+}    
+
+function addCmdToTableArrosageMaster(_cmd) {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';                                                                                            
+    tr += '<td>';                                                                                                                                                                                         
+    tr += '<input class="cmdAttr form-control input-sm" data-l1key="id" style="display : none;">';                                                              
+    tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" disabled ></td>';         
+  tr += '<td></td>';
+
+   tr += '<td>';
+    tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="action" style="display : none;">';
+    tr += '<input class="cmdAttr form-control input-sm" data-l1key="subType" value="superbox" style="display : none;">';
+    if (is_numeric(_cmd.id)) {
+        tr += '<a class="btn btn-default btn-xs cmdAction expertModeVisible" data-action="configure"><i class="fa fa-cogs"></i></a> ';
+        tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
+    }
+    //tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i></td>';
+    tr += '</tr>';
+    $('#table_cmd_master tbody').append(tr);
+    $('#table_cmd_master tbody tr:last').setValues(_cmd, '.cmdAttr');
+
+$('#table_cmd tbody').append(tr);                                                                                                                                                              
+    $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr'); 
+} 
+
+function addCmdToTableArrosage(_cmd) {
     var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
     tr += '<td>';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="id" style="display : none;">';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="name"></td>';
 
-    tr += '<td><input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="startTime" placeholder="00:00"></td>';
-    tr += '<td><input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="duration" placeholder="00"></td>';
+    tr += '<td><input class="cmdAttr form-control input-sm" type="time" data-l1key="configuration" data-l2key="startTime" placeholder="00:00"></td>';
+    //tr += '<td><select class="cmdAttr form-control input-sm" type="number"  data-l1key="configuration" data-l2key="zone" placeholder="00"></td>';
+	
+    tr += '<td>';
+	
+//toto = jeedom.eqLogic.cache.byId[217];	
+ //tr += toto.name ;
+
+
+   tr += '</td>';
 
     tr += '<td>';
     tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbDay1" type="checkbox" name="startDays" id="mon" value="1">L</label>';
@@ -110,6 +154,11 @@ function addCmdToTable(_cmd) {
     }
     tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i></td>';
     tr += '</tr>';
-    $('#table_cmd tbody').append(tr);
-    $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
+
+    table_cmd = '#table_cmd';
+    table_cmd+= '_'+_cmd.eqType;
+    $(table_cmd+' tbody').append(tr);
+    $(table_cmd+' tbody tr:last').setValues(_cmd, '.cmdAttr');
+
+	
 }
