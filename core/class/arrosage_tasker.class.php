@@ -27,12 +27,6 @@ class arrosage_tasker extends eqLogic {
 		return 'index.php?v=d&p=arrosage&m=arrosage&id=' . $this->getId();
 	}//End getLinkToConfiguration func
 
- public static function cron() {
-		log::add('arrosage', 'info','tasker log start' );
-	}	
-
-
-
 }
 
 
@@ -45,7 +39,7 @@ class arrosage_taskerCmd extends cmd {
 
                 $this->setType('action');
                 $this->setSubType('other');
-                $this->setLogicalId('zone');
+                $this->setLogicalId('task');
 
                 //check if the duration of the task is set
           //      if ($this->getConfiguration('duration') == '') {

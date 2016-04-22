@@ -47,7 +47,7 @@
 
 <legend>{{Tache}}</legend>
 <a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{Ajouter une commande}}</a><br/><br/>
-<table id="table_cmd_arrosage_tasker" class="table table-bordered table-condensed">
+<table id="table_cmd" class="table table-bordered table-condensed">
     <thead>
         <tr>
     <th>{{Nom}}</th><th>{{Heure début}}</th><th>{{Zone}}</th><th>{{Jours}}</th><th>{{Mois}}</th><th>{{Inactive}}</th><th></th>

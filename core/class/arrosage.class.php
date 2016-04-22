@@ -27,204 +27,217 @@ class arrosage extends eqLogic {
 
   public static function cron() {
 	log::add('arrosage', 'info','log start' );
-	return 1;
 
 
-      foreach (eqLogic::byType('arrosage') as $eqLogic) {
-//     	log::add('arrosage', 'info','eqLogic : ' . $eqLogic->getHumanName().', id='.$eqLogic->getId());
-	
-	$winterStatus = $eqLogic->getConfiguration('winterMode');
-	$rainStopStatus = $eqLogic->getConfiguration('rainStop');
-	$windStopStatus = $eqLogic->getConfiguration('windStop');
-	$moistureStopStatus = $eqLogic->getConfiguration('moistureStop');
-	$uvStopStatus =  $eqLogic->getConfiguration('uvStop');
-	
-	
-	$stopTask = 0;
 
-
-        //check if winter mode has been activated                                 
-	if ( $winterStatus == 1 ){
-                $stopTask = 1;
-        }
-	//check if the rain control has been activated
-	if ( $rainStopStatus == 1 ){
-		 //$rainSensorID = trim(config::byKey('rainSensor','arrosage'),"#");
-                $cmd_device=cmd::byId(trim(config::byKey('rainSensor','arrosage'),"#"));
-
-                //log::add('arrosage', 'info','eqLogic : ' . $cmd_device->getid());
-
-                if ( $cmd_device->getConfiguration('value') == 1){
-                         $stopTask = 1;
-                }
-        }                                                                                                                                                                                                                                    
-        //check if the wind crontrol has been activated
-        if ( $windStopStatus == 1 ){
-                $cmd_device=cmd::byId(trim(config::byKey('windSensor','arrosage'),"#"));
-
-		//check if the current wind speed if under the max speed
-		if($cmd_device->execCmd() > $eqLogic->getConfiguration('windSpeedMax')){
-			$stopTask = 1;
-		}
-        }
-
-	//check if the moisture control has been activated
-	if ( $moistureStopStatus == 1 ){
-		$cmd_device=cmd::byId(trim($eqLogic->getConfiguration('moistureSensor'),"#"));
+	foreach (cmd::byLogicalId('task') as $cmdTask) {
 		
-		$moistureValue=$cmd_device->getConfiguration('value');
-		$moistureMaxValue=$eqLogic->getConfiguration('moistureMax');
-		$moistureMinValue=$eqLogic->getConfiguration('moistureMin');
-
-		if ( $moistureValue > $moistureMaxValue ){
-			$stopTask = 1;
-		}
-	}
-
-	//check if uv crontole has been activated
-        if ( $uvStopStatus == 1 ){
-                $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('uvSensor'),"#"));
-
-                $uvValue=$cmd_device->getConfiguration('value');
-                $uvMaxValue=$eqLogic->getConfiguration('uvMax');
-//                $moistureMinValue=$eqLogic->getConfiguration('uvMin');
-
-                if ( $uvValue > $uvMaxValue ){
-                        $stopTask = 1;
-                }
-        }
+        	$startTime =  $cmdTask->getConfiguration('startTime');
+        	$disableTask = $cmdTask->getConfiguration('cbDisable');
+        	$startDay = "";
+        	$startMonth = "";
+		$duration="";
+		
+        	 //if the task is disable exit
+        	 if ( $disableTask == 1){
+        	       return 1;
+        	}
 
 
 
+        	 //concatenation of the week days we need to start the cron job
+        	 for ($i = 1; $i <= 7 ;$i++)
+        	 {
+        	        if ($cmdTask->getConfiguration('cbDay'.$i) == 1) {
+        	          if ($startDay != "")
+        	          {
+        	                $startDay = $startDay .",";
+        	          }
+        	          $startDay = $startDay . $i;
+        	        }
+        	 }
 
-        //check if an interrption has been detected
-        if ( $stopTask == 1 ){
-
-		$cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneStatus'),"#"));
-		//check if the valve is open
-                if ( $cmd_device->getConfiguration('value') == 1){
-			//close the valve
-                        $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));
-                        $cmd_device->execute();
-			
-			//close the master valve
-                	$eqLogic->manageMasterValve('Off');
-
-                }
-
-                return 1;
-        }
-
-     	foreach (cmd::byEqLogicId($eqLogic->getId()) as $cmd_def) {
-//          log::add('arrosage', 'info','cmd : '.$cmd_def->getHumanName() );
-     	
-	  $duration = $cmd_def->getConfiguration('duration');
-	  $startTime =  $cmd_def->getConfiguration('startTime');
-	  $disableTask = $cmd_def->getConfiguration('cbDisable');
-          $startDay = "";
-	  $startMonth = "";
-
-	  //if the task is disable exit
-	  if ( $disableTask == 1){
-		return 1;
-	 }
-
-
-          //log::add('arrosage', 'info','real duration : '.$duration );
-
-          //concatenation of the week days we need to start the cron job
-          for ($i = 1; $i <= 7 ;$i++)
-          {
-                 if ($cmd_def->getConfiguration('cbDay'.$i) == 1) {
-	           if ($startDay != "")
-                   {                                                                                                                                             
-                         $startDay = $startDay .",";
-                   }      
-                   $startDay = $startDay . $i;
-                 }
-          }
-
-          //concatenation of the moth we need to start the cron job
-	  for ($i = 1; $i <= 12 ;$i++)
-          {
-                 if ($cmd_def->getConfiguration('cbMonth'.$i) == 1) {
-                   if ($startMonth != "")
-                   {
-                         $startMonth = $startMonth .",";
-                   }
-                   $startMonth = $startMonth . $i;
-                 }
-          }
+        	 //concatenation of the moth we need to start the cron job
+        	 for ($i = 1; $i <= 12 ;$i++)
+        	 {
+        	        if ($cmdTask->getConfiguration('cbMonth'.$i) == 1) {
+        	          if ($startMonth != "")
+        	          {
+        	                $startMonth = $startMonth .",";
+        	          }
+        	          $startMonth = $startMonth . $i;
+        	        }
+        	 }
+		
+		
+		foreach (eqLogic::byType('arrosage') as $eqLogic) {
+			if( $eqLogic->getConfiguration($cmdTask->getName()) == 1){
+				$duration=$eqLogic->getConfiguration('zoneDuration');
+				 $winterStatus = $eqLogic->getConfiguration('winterMode');
+       				 $rainStopStatus = $eqLogic->getConfiguration('rainStop');
+       				 $windStopStatus = $eqLogic->getConfiguration('windStop');
+       				 $moistureStopStatus = $eqLogic->getConfiguration('moistureStop');
+       				 $uvStopStatus =  $eqLogic->getConfiguration('uvStop');
 
 
-	  //creation of the stopTime
-          $stopTime = date('H:i',strtotime($startTime . '+ '.$duration .' minute'));
+       				 $stopTask = 0;
 
-          $pos = strpos($startTime,':');
-          $startHour = substr($startTime,0,$pos);
-          $startMin = substr($startTime,-$pos);
+				//apply duration modification from water adjustement value
+				foreach (eqLogic::byType('arrosage_master') as $obMaster) {
+					$waterAdjValue=$obMaster->getConfiguration('waterAdj');
+					
+					$duration = floor(($duration * $waterAdjValue)/100);
+					 log::add('arrosage', 'info','master water : ' .  $duration);
+				}
 
-          $pos = strpos($stopTime,':');                                                                                                                        
-          $stopHour = substr($stopTime,0,$pos);
-          $stopMin = substr($stopTime,-$pos);     
 
-  //        $startMin = "*";
-  //        $startHour = "*";
- 
- //       $startMonth = "*";
-          $startDayOfMonth = "*";
-   //      $startDay = "*";
- 
-          $startCron = $startMin." ".$startHour." ".$startDayOfMonth." ".$startMonth." ".$startDay;
-	  $stopCron = $stopMin." ".$stopHour." * * *";  
-  
+       				 //check if winter mode has been activated
+       				 if ( $winterStatus == 1 ){
+       				         $stopTask = 1;
+       				 }
+       				 //check if the rain control has been activated
+       				 if ( $rainStopStatus == 1 ){
+       				          //$rainSensorID = trim(config::byKey('rainSensor','arrosage'),"#");
+       				         $cmd_device=cmd::byId(trim(config::byKey('rainSensor','arrosage'),"#"));
 
-	//log::add('arrosage', 'info','Cron added '.$startCron );
+       				        // log::add('arrosage', 'info','rain stop : ' .  $cmd_device->getConfiguration('value'));
 
-          if ($eqLogic->getIsEnable() == 1 && $startCron != '') {
-	     //cron to open the valve
-             try {
+       				         if ( $cmd_device->getConfiguration('value') == 1){
+       				                  $stopTask = 1;
+       				         }
+       				 }
+       				 //check if the wind crontrol has been activated
+       				 if ( $windStopStatus == 1 ){
+       				         $cmd_device=cmd::byId(trim(config::byKey('windSensor','arrosage'),"#"));
+					
+					//log::add('arrosage', 'info','wind stop : ' .  $cmd_device->execCmd());
+       				         //check if the current wind speed if under the max speed
+       				         if($cmd_device->execCmd() > $eqLogic->getConfiguration('windSpeedMax')){
+       				                 $stopTask = 1;
+       				         }
+       				 }
 
-                $c = new Cron\CronExpression($startCron, new Cron\FieldFactory);
-                if ($c->isDue()) {
-                        try {
-                          // log::add('arrosage', 'info','Cron added '.$startCron );
-			  //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
-			       $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOn'),"#"));
-				$cmd_device->execute();
+       				 //check if the moisture control has been activated
+       				 if ( $moistureStopStatus == 1 ){
+       				         $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('moistureSensor'),"#"));
+
+       				         $moistureValue=$cmd_device->getConfiguration('value');
+       				         $moistureMaxValue=$eqLogic->getConfiguration('moistureMax');
+       				         $moistureMinValue=$eqLogic->getConfiguration('moistureMin');
+
+       				         if ( $moistureValue > $moistureMaxValue ){
+       				                 $stopTask = 1;
+       				         }
+       				 }
+
+       				 //check if uv crontole has been activated
+       				 if ( $uvStopStatus == 1 ){
+       				         $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('uvSensor'),"#"));
+
+       				         $uvValue=$cmd_device->getConfiguration('value');
+       				         $uvMaxValue=$eqLogic->getConfiguration('uvMax');
+//     				           $moistureMinValue=$eqLogic->getConfiguration('uvMin');
+
+       				         if ( $uvValue > $uvMaxValue ){
+       				                 $stopTask = 1;
+       				         }
+       				 }
 				
-				manageMasterValve('On');
-
-                        } catch (Exception $exc) {
-                                log::add('arrosage', 'error', __('Erreur pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $exc->getMessage());
-                        }
-                }
-
-
-             } catch (Exception $exc) {
-                     log::add('arrosage', 'error', __('Expression cron non valide pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $startCron);
-             }
-	     // cron to close the valve
-	     try {
-
-  		$cStop = new Cron\CronExpression($stopCron, new Cron\FieldFactory);
-                if ($cStop->isDue()) {                                                                                                                          
-                        //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOff')." at ".$stopTime );
-                        $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));                                                              
-                        $cmd_device->execute();
-
-			 manageMasterValve('Off');
-
-                } 
- 	     } catch (Exception $exc) {                                                                                                                         
-                     log::add('arrosage', 'error', __('Expression cron non valide pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $stopCron);
-             }            
+				//check if an interrption has been detected
+			        if ( $stopTask == 1 ){
+			
+			                $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneStatus'),"#"));
+			                //check if the valve is open
+			                if ( $cmd_device->getConfiguration('value') == 1){
+			                        //close the valve
+			                        $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));
+			                        $cmd_device->execute();
+			
+			                        //close the master valve
+			                        $eqLogic->manageMasterValve('Off');
+			
+			                }
+			
+			                return 1;
+			        }
+				
 
 
-          }
 
-     	}
-     }
+	
+
+				 //construction start cron
+	        		$pos = strpos($startTime,':');
+                		$startHour = substr($startTime,0,$pos);
+                		$startMin = substr($startTime,-$pos);
+                		$startDayOfMonth = "*";
+                		$startCron = $startMin." ".$startHour." ".$startDayOfMonth." ".$startMonth." ".$startDay;
+
+
+
+
+				//create stop stime
+				$stopTime = date('H:i',strtotime($startTime . '+ '.$duration .' minute'));
+	
+				//create stop cron
+		                 $pos = strpos($stopTime,':');
+	        	         $stopHour = substr($stopTime,0,$pos);
+                		 $stopMin = substr($stopTime,-$pos);
+				 $stopCron = $stopMin." ".$stopHour." * * *";
+
+
+		                log::add('arrosage', 'info','cmd taker start:'.$startCron );
+				log::add('arrosage', 'info','cmd taker stop:'.$stopCron );
+
+				
+				 //cron to open the valve
+   			          try {
+   			             $c = new Cron\CronExpression($startCron, new Cron\FieldFactory);
+   			             if ($c->isDue()) {
+   			                     try {
+   			                       //log::add('arrosage', 'info','Cron added '.$startCron );
+   			                       //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
+   			                            $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOn'),"#"));
+   			                             $cmd_device->execute();
+
+   			                             manageMasterValve('On');
+
+   			                     } catch (Exception $exc) {
+   			                             log::add('arrosage', 'error', __('Erreur pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $exc->getMessage());
+   			                     }
+   			             }
+
+
+   			          } catch (Exception $exc) {
+   			                  log::add('arrosage', 'error', __('Expression cron non valide pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $startCron);
+   			          }
+   			          // cron to close the valve
+   			          try {
+
+   			             $cStop = new Cron\CronExpression($stopCron, new Cron\FieldFactory);
+   			             if ($cStop->isDue()) {
+   			                     //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOff')." at ".$stopTime );
+   			                     $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));
+   			                     $cmd_device->execute();
+
+   			                      manageMasterValve('Off');
+
+   			             }
+   			          } catch (Exception $exc) {
+   			                  log::add('arrosage', 'error', __('Expression cron non valide pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $stopCron);
+   			          }
+
+
+				//save last stop time as new start time + 1min to have a short pause 
+				$startTime=date('H:i',strtotime($stopTime. '+ 1 minute'));
+			}
+
+			
+		}
+
+
+	}	
+
  }
 
   // function to open and close the master valve
@@ -253,6 +266,9 @@ class arrosage extends eqLogic {
     		$eqLogic->setName('Centrale');
     		$eqLogic->setLogicalId($this->getId().'_centrale');
     		$eqLogic->setObject_id($this->getObject_id());
+		$eqLogic->setConfiguration('waterAdj',100);
+                $eqLogic->setConfiguration('delayAdj',0);
+		$eqLogic->setConfiguration('masterStop',0);
     		$eqLogic->setIsVisible(1);
     		$eqLogic->setIsEnable(1);
 		$eqLogic->save();
@@ -436,7 +452,7 @@ class arrosage extends eqLogic {
 	 //change winter option status                                                                                                                                   
         public function doWinter(){                                                                                                                                                                     
                 //log::add('arrosage', 'info','command: winter' );
-		$this->changeOptionStatus('winterMode');
+		$ethis->changeOptionStatus('winterMode');
         }    
 
 	//change rain option status                                                                                                                          

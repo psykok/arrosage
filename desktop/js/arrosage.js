@@ -53,11 +53,14 @@ function addCmdToTable(_cmd) {
     if (!isset(_cmd.configuration)) {
         _cmd.configuration = {};
     }
-
-    if (init(_cmd.eqType) == 'arrosage_tasker') {
-        addCmdToTableArrosage(_cmd);
-    }else{                                                                                                                                                      
-        addCmdToTableArrosageMaster(_cmd);  
+    
+    if (init(_cmd.eqType) == 'arrosage_master') {
+        addCmdToTableArrosageMaster(_cmd);
+    }else if (init(_cmd.eqType) == 'arrosage') {
+	addCmdToTableArrosageMaster(_cmd);
+    }
+	else{                                                                                                                                                      
+        addCmdToTableArrosage(_cmd);  
     }                                                                                                                                                           
 //    $('#table_cmd tbody').append(init(_cmd.eqType));
                                                                                                                                                                                                   
@@ -82,8 +85,8 @@ function addCmdToTableArrosageMaster(_cmd) {
     $('#table_cmd_master tbody').append(tr);
     $('#table_cmd_master tbody tr:last').setValues(_cmd, '.cmdAttr');
 
-$('#table_cmd tbody').append(tr);                                                                                                                                                              
-    $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr'); 
+    $('#table_cmd_zone tbody').append(tr);                                                                                                                                                              
+    $('#table_cmd_zone tbody tr:last').setValues(_cmd, '.cmdAttr'); 
 } 
 
 function addCmdToTableArrosage(_cmd) {
@@ -156,7 +159,9 @@ function addCmdToTableArrosage(_cmd) {
     tr += '</tr>';
 
     table_cmd = '#table_cmd';
-    table_cmd+= '_'+_cmd.eqType;
+//    table_cmd+= '_'+_cmd.eqType;
+
+
     $(table_cmd+' tbody').append(tr);
     $(table_cmd+' tbody tr:last').setValues(_cmd, '.cmdAttr');
 
