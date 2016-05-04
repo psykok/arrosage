@@ -68,11 +68,25 @@ class arrosage extends eqLogic {
         	          $startMonth = $startMonth . $i;
         	        }
         	 }
-		
+	
+		 //get water adj value and apply startup delay
+                 foreach (eqLogic::byType('arrosage_master') as $obMaster) {
+                         $waterAdjValue=$obMaster->getConfiguration('waterAdj');
+
+                         $startDelay=$obMaster->getConfiguration('delayAdj');
+			$startTime = date('H:i',strtotime($startTime . '+ '.$startDelay .' minute'));
+                 }
+
+
+
+
+
+
+	
 		
 		foreach (eqLogic::byType('arrosage') as $eqLogic) {
 			if( $eqLogic->getConfiguration($cmdTask->getName()) == 1){
-				$duration=$eqLogic->getConfiguration('zoneDuration');
+				 $duration = $eqLogic->getConfiguration('zoneDuration');
 				 $winterStatus = $eqLogic->getConfiguration('winterMode');
        				 $rainStopStatus = $eqLogic->getConfiguration('rainStop');
        				 $windStopStatus = $eqLogic->getConfiguration('windStop');
@@ -83,12 +97,9 @@ class arrosage extends eqLogic {
        				 $stopTask = 0;
 
 				//apply duration modification from water adjustement value
-				foreach (eqLogic::byType('arrosage_master') as $obMaster) {
-					$waterAdjValue=$obMaster->getConfiguration('waterAdj');
+				$duration = floor(($duration * $waterAdjValue)/100);
+				 log::add('arrosage', 'info','master water : ' .  $duration);
 					
-					$duration = floor(($duration * $waterAdjValue)/100);
-					 log::add('arrosage', 'info','master water : ' .  $duration);
-				}
 
 
        				 //check if winter mode has been activated
@@ -186,8 +197,8 @@ class arrosage extends eqLogic {
 				 $stopCron = $stopMin." ".$stopHour." * * *";
 
 
-		                log::add('arrosage', 'info','cmd taker start:'.$startCron );
-				log::add('arrosage', 'info','cmd taker stop:'.$stopCron );
+		                //log::add('arrosage', 'info','cmd taker start:'.$startCron );
+				//log::add('arrosage', 'info','cmd taker stop:'.$stopCron );
 
 				
 				 //cron to open the valve
@@ -427,13 +438,13 @@ class arrosage extends eqLogic {
         } 
 */
   	public function postInsert(){
-                if(count(cmd::byLogicalId('winter')) == 0) {
+        //        if(count(cmd::byLogicalId('winter')) == 0) {
 			$this->createCustomCmd('winter');
 			$this->createCustomCmd('rain');
 			$this->createCustomCmd('wind');
 			$this->createCustomCmd('moisture');
 			$this->createCustomCmd('zoneAction');			
-                }
+          //      }
 
 
         }
@@ -452,7 +463,7 @@ class arrosage extends eqLogic {
 	 //change winter option status                                                                                                                                   
         public function doWinter(){                                                                                                                                                                     
                 //log::add('arrosage', 'info','command: winter' );
-		$ethis->changeOptionStatus('winterMode');
+		$this->changeOptionStatus('winterMode');
         }    
 
 	//change rain option status                                                                                                                          
@@ -481,8 +492,8 @@ class arrosage extends eqLogic {
 	//function to change the option status
 	public function changeOptionStatus($optionName){
                 $optionSatus=$this->getConfiguration($optionName);
-
-                if($optionSatus == 1){
+                
+		if($optionSatus == 1){
                         $this->setConfiguration($optionName,0);
                 }
                 else if($optionSatus == 0){
