@@ -166,7 +166,7 @@ class arrosage extends eqLogic {
 			
 			                        //close the master valve
 			                        $eqLogic->manageMasterValve('Off');
-			
+						$eqLogic->refreshWidget();
 			                }
 			
 			                return 1;
@@ -210,6 +210,7 @@ class arrosage extends eqLogic {
    			                       //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
    			                            $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOn'),"#"));
    			                             $cmd_device->execute();
+						     $eqLogic->refreshWidget();
 
    			                             manageMasterValve('On');
 
@@ -230,7 +231,7 @@ class arrosage extends eqLogic {
    			                     //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOff')." at ".$stopTime );
    			                     $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));
    			                     $cmd_device->execute();
-
+					     $eqLogic->refreshWidget();
    			                      manageMasterValve('Off');
 
    			             }
