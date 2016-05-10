@@ -184,11 +184,15 @@ class arrosage extends eqLogic {
                 		$startDayOfMonth = "*";
                 		$startCron = $startMin." ".$startHour." ".$startDayOfMonth." ".$startMonth." ".$startDay;
 
-
-
-
 				//create stop stime
 				$stopTime = date('H:i',strtotime($startTime . '+ '.$duration .' minute'));
+				
+				//check if the time get to the next day
+				if ( strtotime($startTime) >  strtotime($stopTime)){
+				}
+
+
+
 	
 				//create stop cron
 		                 $pos = strpos($stopTime,':');
@@ -484,9 +488,30 @@ class arrosage extends eqLogic {
                 //log::add('arrosage', 'info','command: moisture' );                                                                                                 
 		$this->changeOptionStatus('moistureStop');
         } 
+
+	//activate or desactivate the zone
 	public function doZoneAction(){
                 log::add('arrosage', 'info','command: zoneAction' );
-                //$this->changeOptionStatus('moistureStop');
+
+		$cmd_device=cmd::byId(trim($this->getConfiguration('zoneStatus'),"#"));
+                //check if the valve is open
+                if ( $cmd_device->getConfiguration('value') == 1){
+                        //close the valve
+                        $cmd_device=cmd::byId(trim($this->getConfiguration('zoneOff'),"#"));
+                        $cmd_device->execute();
+
+                        //close the master valve
+                        $this->manageMasterValve('Off');
+                        $this->refreshWidget();
+                } else{
+			//open the master valve
+                        $this->manageMasterValve('Off');
+			
+			//open the valve       
+                        $cmd_device=cmd::byId(trim($this->getConfiguration('zoneOn'),"#"));
+                        $cmd_device->execute(); 
+			$this->refreshWidget();
+		}
         }
    
 	
