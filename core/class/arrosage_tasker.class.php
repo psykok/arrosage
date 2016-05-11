@@ -27,6 +27,31 @@ class arrosage_tasker extends eqLogic {
 		return 'index.php?v=d&p=arrosage&m=arrosage&id=' . $this->getId();
 	}//End getLinkToConfiguration func
 
+
+        public function toHtml($_version = 'dashboard') {
+                if ($this->getIsEnable() != 1) {
+                        return '';
+                }
+		$cmd_list='';	
+		 $replace['#id#'] = $this->getId();                                                                                                                                                        
+                $replace['#eqLink#'] = $this->getLinkToConfiguration();                                                                                         
+                $replace['#zoneName#'] = $this->getName(); 
+
+		foreach (cmd::byEqLogicId($this->getId()) as $cmd_def) {
+	//      	log::add('arrosage', 'info','dashboard cmd : '.$cmd_def->getHumanName() );
+	 
+	        	$cmd_name = $cmd_def->getName();
+	        	$cmd_start = $cmd_def->getConfiguration('startTime');
+			$cmd_list .= '<tr><td>' . $cmd_name ."</td><td>".$cmd_start."</td><td> L M M J V S D </td></tr>";
+		
+		}
+		$replace['#cmd_list#'] = $cmd_list;
+		
+		$html = template_replace($replace, getTemplate('core', $_version, 'tasker', 'arrosage'));
+               // cache::set('arrosageWidget' . $_version . $this->getId(), $html, 0);
+                return $html;
+	}
+
 }
 
 

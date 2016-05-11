@@ -1,11 +1,11 @@
-Le plugin arrosage permet de gÃ©rer so arrosage automatique. +
-Il prend en compte plusieurs paramÃ¨trse tels que: +
+Le plugin arrosage permet de gérer so arrosage automatique. +
+Il prend en compte plusieurs paramàtres tels que: +
 - la vitesse du vent, +
-- le niveau d'humiditÃ© du so,l +
+- le niveau d'humidité du so,l +
 - le niveau d'uv, +
 - la pluie. +
 
-Le contrÃ´le des vannes d'arrosage ainsi que le relevÃ© des pametr¨tres de cooltrÃe se fait par des Ã©quipements etÃ©rieurs au plugin. +
+Le contrôle des vannes d'arrosage ainsi que le relevé des pametrètres de contrôle se fait par des équipements etérieurs au plugin. +
 
 '''
 include::configuration.asciidoc[]
