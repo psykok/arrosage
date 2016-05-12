@@ -128,6 +128,18 @@ $eqLogics = eqLogic::byType('arrosage');
     <form class="form-horizontal">
         <fieldset>
                 <legend>{{Configuration}}</legend>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">{{Type arrosage}}</label>
+                    <div class="col-sm-6">
+                    <select class="eqLogicAttr form-control" data-l1key='configuration' data-l2key='zoneType' style="width : 200px;" >
+			 <option value="sprinkler">{{Standard}}</option>
+			 <option value="drip">{{Goute à goute}}</option>
+		    </select>	
+
+                    </div>
+                </div>
+		
                 <div class="form-group">
                     <label class="col-sm-2 control-label">{{Hivernage}}</label>
                     <div class="col-sm-6">

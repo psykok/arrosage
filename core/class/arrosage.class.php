@@ -360,11 +360,18 @@ class arrosage extends eqLogic {
 	}
 	$replace['#cmd_list#'] = $cmd_list;
 */
-	//check if the valve status
+	//set the right icone for the widget
+	if (  $this->getConfiguration('zoneType') == "drip" ) {
+		$iconeType="drip";
+	}else {	
+		$iconeType="sprinkler2";
+	}
+
+        //check if the valve status
 	if ( $cmd_device->getConfiguration('value') == 1){	
-	   $replace['#cmd_stat#'] = 'icon_sprinkler2_on';
+	   $replace['#cmd_stat#'] = 'icon_'.$iconeType.'__on';
 	}else {
-           $replace['#cmd_stat#'] = 'icon_sprinkler2_off';
+           $replace['#cmd_stat#'] = 'icon_'.$iconeType.'_off';
 	}
 
         //check if the rain dectection is activated
