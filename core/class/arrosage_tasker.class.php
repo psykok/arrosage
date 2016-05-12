@@ -42,7 +42,20 @@ class arrosage_tasker extends eqLogic {
 	 
 	        	$cmd_name = $cmd_def->getName();
 	        	$cmd_start = $cmd_def->getConfiguration('startTime');
-			$cmd_list .= '<tr><td>' . $cmd_name ."</td><td>".$cmd_start."</td><td> L M M J V S D </td></tr>";
+			$cmd_list .= '<tr><td id="tab">' . $cmd_name .'</td><td  id="tab">'.$cmd_start.'</td><td  id="tab_day">';
+			$cmd_list .= '<table id="days"><tr>';
+			 for ($i = 1; $i <= 7 ;$i++)
+	                 {
+				$tdstyle=' style="background-color: none;color:white;"';
+	                        if ($cmd_def->getConfiguration('cbDay'.$i) == 1) {
+					$tdstyle=' style="background-color: white;color:#19bc9c;"';
+	                        }
+				$shortDayName=array(1 => "L","M","M","J","V","S","D");
+				$cmd_list .=  '<td'.$tdstyle.'>'.$shortDayName[$i].'</td>';
+	                 }
+			
+
+			$cmd_list .= " </tr></table></td></tr>";
 		
 		}
 		$replace['#cmd_list#'] = $cmd_list;

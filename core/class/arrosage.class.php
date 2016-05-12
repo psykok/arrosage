@@ -341,6 +341,7 @@ class arrosage extends eqLogic {
         $replace['#id#'] = $this->getId();
 	$replace['#eqLink#'] = $this->getLinkToConfiguration();
 	$replace['#zoneName#'] = $this->getName();
+	$replace['#duration#'] = $this->getConfiguration('zoneDuration');	
 
 	$cmd_device=cmd::byId(trim($this->getConfiguration('zoneStatus'),"#"));
 
@@ -348,9 +349,8 @@ class arrosage extends eqLogic {
                         $replace['#'.$cmd_def->getLogicalId().'ID#'] =  $cmd_def->getId();
                 }
 
-
+/*
         foreach (cmd::byEqLogicId($this->getId()) as $cmd_def) {
-//          log::add('arrosage', 'info','dashboard cmd : '.$cmd_def->getHumanName() );
  
            $cmd_name = $cmd_def->getName();
            $cmd_start = $cmd_def->getConfiguration('startTime');
@@ -359,7 +359,7 @@ class arrosage extends eqLogic {
 	
 	}
 	$replace['#cmd_list#'] = $cmd_list;
-
+*/
 	//check if the valve status
 	if ( $cmd_device->getConfiguration('value') == 1){	
 	   $replace['#cmd_stat#'] = 'icon_sprinkler2_on';
