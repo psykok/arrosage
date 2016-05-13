@@ -26,20 +26,25 @@ include_file('core', 'arrosage_tasker', 'class', 'arrosage');
 class arrosage extends eqLogic {
 
   public static function cron() {
-	log::add('arrosage', 'info','log start' );
+	log::add('arrosage', 'debug','cron : log start' );
 
 
 
 	foreach (cmd::byLogicalId('task') as $cmdTask) {
+		
 		
         	$startTime =  $cmdTask->getConfiguration('startTime');
         	$disableTask = $cmdTask->getConfiguration('cbDisable');
         	$startDay = "";
         	$startMonth = "";
 		$duration="";
+		$cmdName = $cmdTask->getName();
 		
+		 log::add('arrosage', 'debug','cron : '.$cmdName );		
+
         	 //if the task is disable exit
         	 if ( $disableTask == 1){
+			log::add('arrosage', 'info','task : '.$cmdName.':  has been disable' );
         	       return 1;
         	}
 
@@ -76,12 +81,6 @@ class arrosage extends eqLogic {
                          $startDelay=$obMaster->getConfiguration('delayAdj');
 			$startTime = date('H:i',strtotime($startTime . '+ '.$startDelay .' minute'));
                  }
-
-
-
-
-
-
 	
 		
 		foreach (eqLogic::byType('arrosage') as $eqLogic) {
@@ -92,13 +91,14 @@ class arrosage extends eqLogic {
        				 $windStopStatus = $eqLogic->getConfiguration('windStop');
        				 $moistureStopStatus = $eqLogic->getConfiguration('moistureStop');
        				 $uvStopStatus =  $eqLogic->getConfiguration('uvStop');
+				 $zoneName = $eqLogic->getName();
 
 
        				 $stopTask = 0;
 
 				//apply duration modification from water adjustement value
 				$duration = floor(($duration * $waterAdjValue)/100);
-				 log::add('arrosage', 'info','master water : ' .  $duration);
+				 log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : duration : ' .  $duration);
 					
 
 
@@ -114,7 +114,8 @@ class arrosage extends eqLogic {
        				        // log::add('arrosage', 'info','rain stop : ' .  $cmd_device->getConfiguration('value'));
 
        				         if ( $cmd_device->getConfiguration('value') == 1){
-       				                  $stopTask = 1;
+       				                $stopTask = 1;
+						log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : rain control active');
        				         }
        				 }
        				 //check if the wind crontrol has been activated
@@ -124,7 +125,8 @@ class arrosage extends eqLogic {
 					//log::add('arrosage', 'info','wind stop : ' .  $cmd_device->execCmd());
        				         //check if the current wind speed if under the max speed
        				         if($cmd_device->execCmd() > $eqLogic->getConfiguration('windSpeedMax')){
-       				                 $stopTask = 1;
+       				                $stopTask = 1;
+						log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : wind control active');
        				         }
        				 }
 
@@ -137,7 +139,8 @@ class arrosage extends eqLogic {
        				         $moistureMinValue=$eqLogic->getConfiguration('moistureMin');
 
        				         if ( $moistureValue > $moistureMaxValue ){
-       				                 $stopTask = 1;
+       				                $stopTask = 1;
+						log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : moisture control active');
        				         }
        				 }
 
@@ -150,16 +153,20 @@ class arrosage extends eqLogic {
 //     				           $moistureMinValue=$eqLogic->getConfiguration('uvMin');
 
        				         if ( $uvValue > $uvMaxValue ){
-       				                 $stopTask = 1;
+       				                $stopTask = 1;
+						log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : UV exceed value');
        				         }
        				 }
 				
-				//check if an interrption has been detected
+				//check if an interrupt has been detected
 			        if ( $stopTask == 1 ){
-			
+					log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : interrupt detected');
 			                $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneStatus'),"#"));
 			                //check if the valve is open
 			                if ( $cmd_device->getConfiguration('value') == 1){
+
+						log::add('arrosage', 'info',' zone : '.$zoneName.' : stop job after interrupt');	
+
 			                        //close the valve
 			                        $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));
 			                        $cmd_device->execute();
@@ -191,18 +198,15 @@ class arrosage extends eqLogic {
 				if ( strtotime($startTime) >  strtotime($stopTime)){
 				}
 
-
-
 	
 				//create stop cron
 		                 $pos = strpos($stopTime,':');
 	        	         $stopHour = substr($stopTime,0,$pos);
                 		 $stopMin = substr($stopTime,-$pos);
 				 $stopCron = $stopMin." ".$stopHour." * * *";
-
-
-		                //log::add('arrosage', 'info','cmd taker start:'.$startCron );
-				//log::add('arrosage', 'info','cmd taker stop:'.$stopCron );
+				
+				log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : start cron : '.$startCron);
+				log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : stop cron : '.$stopCron);
 
 				
 				 //cron to open the valve
@@ -212,6 +216,9 @@ class arrosage extends eqLogic {
    			                     try {
    			                       //log::add('arrosage', 'info','Cron added '.$startCron );
    			                       //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
+
+							log::add('arrosage', 'info','cron : zone : '.$zoneName.' : zone on');
+
    			                            $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOn'),"#"));
    			                             $cmd_device->execute();
 						     $eqLogic->refreshWidget();
@@ -233,6 +240,9 @@ class arrosage extends eqLogic {
    			             $cStop = new Cron\CronExpression($stopCron, new Cron\FieldFactory);
    			             if ($cStop->isDue()) {
    			                     //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOff')." at ".$stopTime );
+	
+						log::add('arrosage', 'info','cron : zone : '.$zoneName.' : zone off');
+
    			                     $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('zoneOff'),"#"));
    			                     $cmd_device->execute();
 					     $eqLogic->refreshWidget();
@@ -259,11 +269,11 @@ class arrosage extends eqLogic {
   // function to open and close the master valve
   protected function manageMasterValve($valveCMD) {
 
-	 log::add('arrosage', 'info','mastervalve : in');
+	 log::add('arrosage', 'debug','manageMasterValve : called ');
 	 if ( config::byKey('masterValve','arrosage')  == 1){
 		
-		 log::add('arrosage', 'info','mastervalve :'.$valveCMD);
-	         //close the master valve
+		 log::add('arrosage', 'info','master valve is actioned');
+	         //action the master valve
 	         $cmd_device=cmd::byId(trim(config::byKey('masterValve'.valveCMD,'arrosage'),"#"));
 	         $cmd_device->execute();
          }
@@ -274,7 +284,7 @@ class arrosage extends eqLogic {
   // function to create the master controle panel
   public function createMasterControl(){
 	if(count(eqLogic::byType('arrosage_master'))){
-		 log::add('arrosage', 'info','master controle exist');
+		 log::add('arrosage', 'debug','createMasterControl : master controle exist');
 	}
 	else{
 		$eqLogic = new arrosage_master();
@@ -288,7 +298,7 @@ class arrosage extends eqLogic {
     		$eqLogic->setIsVisible(1);
     		$eqLogic->setIsEnable(1);
 		$eqLogic->save();
-		log::add('arrosage', 'info','master controle doesn\'t exist');	
+		log::add('arrosage', 'debug','createMasterControl : master controle doesn\'t exist');	
 	}
 
   }
@@ -297,7 +307,7 @@ class arrosage extends eqLogic {
  // function to create the master controle panel
   public function createTasker(){
         if(count(eqLogic::byType('arrosage_tasker'))){
-                 log::add('arrosage', 'info','tasker exist');
+                 log::add('arrosage', 'debug','createTasker : tasker exist');
         }
         else{   
                 $eqLogic = new arrosage_tasker();
@@ -308,7 +318,7 @@ class arrosage extends eqLogic {
                 $eqLogic->setIsVisible(1);
                 $eqLogic->setIsEnable(1);
                 $eqLogic->save();
-                log::add('arrosage', 'info','tasker doesn\'t exist');
+                log::add('arrosage', 'debug','createTasker : tasker doesn\'t exist');
         }
 
   }
@@ -369,7 +379,7 @@ class arrosage extends eqLogic {
 
         //check if the valve status
 	if ( $cmd_device->getConfiguration('value') == 1){	
-	   $replace['#cmd_stat#'] = 'icon_'.$iconeType.'__on';
+	   $replace['#cmd_stat#'] = 'icon_'.$iconeType.'_on';
 	}else {
            $replace['#cmd_stat#'] = 'icon_'.$iconeType.'_off';
 	}
@@ -473,32 +483,33 @@ class arrosage extends eqLogic {
 
 
 	 //change winter option status                                                                                                                                   
-        public function doWinter(){                                                                                                                                                                     
-                //log::add('arrosage', 'info','command: winter' );
+        public function doWinter(){
+                log::add('arrosage', 'debug','doWinter : command winter' );
 		$this->changeOptionStatus('winterMode');
         }    
 
 	//change rain option status                                                                                                                          
         public function doRain(){                                                                                                                                                                     
-                //log::add('arrosage', 'info','command: rain' );                                                                                                 
+		log::add('arrosage', 'debug','doRain : command rain' );
 		$this->changeOptionStatus('rainStop');
         }    
 
 	//change wind option status                                                                                                                             
-        public function doWind(){                                                                                                                                                                     
-                //log::add('arrosage', 'info','command: wind' );                                                                                                 
+        public function doWind(){ 
+                log::add('arrosage', 'debug','doWind : command wind' );
 		$this->changeOptionStatus('windStop');
         }    
 
 	 //change moisture option status                                                                                                                              
-        public function doMoisture(){                                                                                                                                                                     
-                //log::add('arrosage', 'info','command: moisture' );                                                                                                 
+        public function doMoisture(){  
+                log::add('arrosage', 'debug','doMoisture : command moisture' );
 		$this->changeOptionStatus('moistureStop');
         } 
 
 	//activate or desactivate the zone
 	public function doZoneAction(){
-                log::add('arrosage', 'info','command: zoneAction' );
+                log::add('arrosage', 'debug','doZoneAction : command zone action' );
+
 
 		$cmd_device=cmd::byId(trim($this->getConfiguration('zoneStatus'),"#"));
                 //check if the valve is open
