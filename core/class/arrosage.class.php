@@ -28,7 +28,82 @@ class arrosage extends eqLogic {
   public static function cron() {
 	log::add('arrosage', 'debug','cron : log start' );
 
+	  //get water adj value and apply startup delay
+        foreach (eqLogic::byType('arrosage_master') as $obMaster) {
+               $waterAdjValue=$obMaster->getConfiguration('waterAdj');
+               $standbyValue=$obMaster->getConfiguration('masterStop');
+               $startDelay=$obMaster->getConfiguration('delayAdj');
+                $rainYD=$obMaster->getConfiguration('rainYD');
+             //  $startTime = date('H:i',strtotime($startTime . '+ '.$startDelay .' minute'));
+        }
 
+       if ( $standbyValue == 1){
+               log::add('arrosage', 'info','master : standby' );
+              return 1;
+       }
+
+
+
+	$weatherInt=0;
+	$weatherH1Status=0;
+	$weatherH0Status=0;
+	
+	//get weather plugin ID
+	$weatherId=cmd::byId(trim(config::byKey('weatherH1','arrosage'),"#"))->getEqLogic_id();
+	log::add('arrosage', 'debug','weather weather_id : '.$weatherId);
+	
+	//get H+1 rain prevision
+	$weatherH1Status=cmd::byEqLogicIdAndLogicalId($weatherId,'condition_id_1')->execCmd();
+	log::add('arrosage', 'debug','weather condition_id_1 : '.$weatherH1Status);
+	
+	//get day rain prevision
+	$weatherH0Status=cmd::byEqLogicIdAndLogicalId($weatherId,'condition_id')->execCmd();
+	log::add('arrosage', 'debug','weather condition_id_1 : '.$weatherH0Status);
+	
+	//check if rain is comming
+	if (($weatherH0Status >= 500 && $weatherH0Status <= 599) || ($weatherH1Status >= 500 && $weatherH1Status <= 599)){
+	        $weatherInt=1;
+		log::add('arrosage', 'info','weather : rain is comming');
+	}
+	
+	 if (($weatherH0Status >= 200 && $weatherH0Status <= 299) || ($weatherH1Status >= 200 && $weatherH1Status <= 299)){
+	        $weatherInt=1;
+		log::add('arrosage', 'info','weather : storm is comming');
+	}
+
+        if ($rainYD == 1){
+                log::add('arrosage', 'info','weather : we had rain yesterday');
+
+                $weatherInt=1;
+        }
+
+
+	//save the day rain prevision just before midnight
+	if (($weatherH0Status >= 200 && $weatherH0Status <= 299) ||($weatherH0Status >= 500 && $weatherH0Status <= 599)){
+		$rainTD=1;
+	}
+	else{
+		$rainTD=0;
+	}	
+	$rainCron="59 23 * * *";
+	try {
+		$cStop = new Cron\CronExpression($rainCron, new Cron\FieldFactory);
+		if ($cStop->isDue()) {
+				$obMaster->setConfiguration('rainYD',$rainTD);	
+				$obMaster->save();
+		                log::add('arrosage', 'info','weather : save day prevision');
+		
+		
+		     }
+		} catch (Exception $exc) {
+	          log::add('arrosage', 'error', __('Expression cron non valide pour ', __FILE__) . ' rainCron : ' . $rainCron);
+	  }
+
+	//if rain exit
+        if ($weatherInt == 1){
+                log::add('arrosage', 'info','weather prevision : enough rain, no irrigation needed ');
+                return 1;
+        }
 
 	foreach (cmd::byLogicalId('task') as $cmdTask) {
 		
@@ -39,30 +114,12 @@ class arrosage extends eqLogic {
         	$startMonth = "";
 		$duration="";
 		$cmdName = $cmdTask->getName();
-		
-		 log::add('arrosage', 'debug','cron : '.$cmdName );		
-
-
-
-		 //get water adj value and apply startup delay
-                 foreach (eqLogic::byType('arrosage_master') as $obMaster) {
-                        $waterAdjValue=$obMaster->getConfiguration('waterAdj');
-			$standbyValue=$obMaster->getConfiguration('masterStop');
-                        $startDelay=$obMaster->getConfiguration('delayAdj');
-                      //  $startTime = date('H:i',strtotime($startTime . '+ '.$startDelay .' minute'));
-                 }
-		
-		if ( $standbyValue == 1){
-                        log::add('arrosage', 'info','master : standby' );
-                       return 1;
-                }
-
 
 
         	 //if the task is disable exit
         	 if ( $disableTask == 1){
 			log::add('arrosage', 'info','task : '.$cmdName.':  has been disable' );
-        	       return 1;
+        	       continue;
         	}
 
 
@@ -184,10 +241,6 @@ class arrosage extends eqLogic {
 			        }
 				
 
-
-
-	
-
 				 //construction start cron
 	        		$pos = strpos($startTime,':');
                 		$startHour = substr($startTime,0,$pos);
@@ -279,7 +332,10 @@ class arrosage extends eqLogic {
 
 
 	         $cmd_device->execute();
-		 $this->refreshWidget();
+
+		 foreach (eqLogic::byType('arrosage_master') as $eqLogic) {
+		 	$eqLogic->refreshWidget();
+		}
          }
 
 
@@ -302,6 +358,8 @@ class arrosage extends eqLogic {
 	
 	        //close the master valve
 	        $this->manageMasterValve($valveCMD);
+		
+		
 	        $this->refreshWidget();
 	//}
   }

@@ -62,6 +62,14 @@
                                 </div>
 
               		</div>
+
+			 <div class="form-group">
+                                <label class="col-sm-2 control-label">{{Pluie hier}}</label>
+                                <div class="col-sm-6">
+                                    <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='rainYD' />
+                                </div>
+                       </div>
+
 	        </fieldset>
 	    </form>
 	</div>

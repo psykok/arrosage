@@ -68,7 +68,9 @@ class arrosage_master extends eqLogic {
 
 			//display master icone with status
 			$replace['#master_status#'] = '<img  class="master" style="height:90px;width:90px; margin:10px;" src="plugins/arrosage/core/template/images/master_'.$masterStatus.'.png"/>';
-	         }
+	         }else{
+		$replace['#master_status#'] = '';
+		}
 	
 
 

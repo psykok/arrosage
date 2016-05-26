@@ -96,6 +96,16 @@ if (!isConnect()) {
 
     </div>
 
+ <div class="form-group">
+          <label class="col-sm-2 control-label">{{Weather Prévision +1}}</label>
+          <div class="col-sm-6">
+
+                  <input class="configKey form-control input-sm"  data-l1key="weatherH1" placeholder="{{Nom Commande Status }}" style="margin-bottom : 5px;width : 300px; display : inline-block;">
+                  <a class="btn btn-default btn-sm cursor pluginWeatherH1" data-input="infoName" style="margin-left : 5px;"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>
+
+          </div>
+
+    </div>
 
   <script>
 	
@@ -120,6 +130,7 @@ if (!isConnect()) {
  	searchEquipment ("#rain_config",".valveOnAction","masterValveOn","action");
         searchEquipment ("#rain_config",".valveOffAction","masterValveOff","action");
         searchEquipment ("#rain_config",".valveStatusInfo","masterValveStatus","info");
+        searchEquipment ("#rain_config",".pluginWeatherH1","weatherH1","info");
 
 
 
