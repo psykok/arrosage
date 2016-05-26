@@ -54,6 +54,23 @@ class arrosage_master extends eqLogic {
 			$replace['#'.$cmd_def->getLogicalId().'ID#'] =  $cmd_def->getId();
 		}
 
+		//check if master is used
+	         if ( config::byKey('masterValve','arrosage')  == 1){
+
+			//check master status
+			 $cmd_device=cmd::byId(trim(config::byKey('masterValveStatus','arrosage'),"#"));
+                        if($cmd_device->getConfiguration('value') == 1){
+				$masterStatus='on';
+			}else{
+				$masterStatus='off';
+			}		
+			
+
+			//display master icone with status
+			$replace['#master_status#'] = '<img  class="master" style="height:90px;width:90px; margin:10px;" src="plugins/arrosage/core/template/images/master_'.$masterStatus.'.png"/>';
+	         }
+	
+
 
 
 		  $html = template_replace($replace, getTemplate('core', $_version, 'master', 'arrosage'));
@@ -118,6 +135,16 @@ class arrosage_master extends eqLogic {
                 $masterCmd->setType('action');
                 $masterCmd->setSubType('other');
                 $masterCmd->save();
+		
+		//create cmd water
+                $masterCmd = new arrosage_masterCmd();
+                $masterCmd->setName('Master');
+                $masterCmd->setLogicalId('master');
+                $masterCmd->setEqLogic_id($this->id);
+                $masterCmd->setType('action');
+                $masterCmd->setSubType('other');
+                $masterCmd->save();
+
 		}
 
 
@@ -136,6 +163,13 @@ class arrosage_master extends eqLogic {
 		}
 		$this->save();
 		$this->refreshWidget();
+		
+		//close all valve
+		foreach (eqLogic::byType('arrosage') as $eqLogic) {
+                	$eqLogic->manageValve('Off');
+        	}
+
+
 	}
 
 	//adjust delay factor
@@ -147,6 +181,31 @@ class arrosage_master extends eqLogic {
 	public function doWaterAdj(){
 		log::add('arrosage', 'info','command: water' );
 	}
+	public function doMaster(){
+                log::add('arrosage', 'info','command: master valve' );
+	
+		 foreach (eqLogic::byType('arrosage') as $eqLogic) {
+
+	
+               //check master status
+                $cmd_device=cmd::byId(trim(config::byKey('masterValveStatus','arrosage'),"#"));
+               if($cmd_device->getConfiguration('value') == 1){
+			log::add('arrosage', 'debug','command: master valve off' );
+                        $eqLogic->manageMasterValve('Off');
+
+               }else{
+                        log::add('arrosage', 'debug','command: master valve on' );
+                        $eqLogic->manageMasterValve('On');
+
+               }
+                $this->refreshWidget();
+	
+		return 1;
+
+		}
+		
+        }
+
 
 
 }
@@ -164,6 +223,11 @@ class arrosage_masterCmd extends cmd {
 		if ($this->getLogicalId() == 'water') {
 			$this->getEqLogic()->doWaterAdj();
                 }
+		
+		 if ($this->getLogicalId() == 'master') {
+                        $this->getEqLogic()->doMaster();
+                }
+
 
 		return false;
 	}

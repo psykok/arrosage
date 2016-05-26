@@ -1,9 +1,54 @@
-<div class="eqLogic-widget eqLogic" style="border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;#style#" data-eqLogic_id="#id#" data-eqLogic_cmd_uid="#uid#" data-version="mobile" >
+<div class="eqLogic-widget eqLogic" style="width: 350px;background-color: #background_color#; #style#" data-eqLogic_id="#id#" data-eqLogic_cmd_uid="#uid#" data-version="dashboard" >
  <center class="widget-name"><strong><a href="#eqLink#" style="font-size : 1.1em;"> #zoneName# </a></strong></center>
+<!--
+	<div class="row" style="margin : 4px">
+		<center>
+		<span style="font-weight : bold; Cursor:default">Aujourd'hui</span>
+		<i class="fa fa-cloud fa-lg today" style="color : #95a5a6; Cursor:default"></i>
+		<br/>
+		<span style="font-weight : bold; Cursor:default">Demain</span>
+		<i class="fa fa-check fa-lg tomorrow" style="color : #95a5a6; Cursor:default"></i>
+		<br/>
+		</center>
+	</div>
+-->
 
 <center>
-	<img style="height:90px;width:90px; display: #visibilityImage#;" src="plugins/arrosage/core/template/images/#cmd_stat#.png"/>
-</center>
+<div class="cmd" data-type="action" data-subtype="other" data-cmd_id="#id#" data-cmd_uid="#uid#">
+	<div  class="col-xs-4">
+                <img  class="standby" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/#standbyIcone#.png"/> 
+	</div>
 
+<!--
+	<div class="col-xs-4">
+		<img  class="delay" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/delay.png"/>
+		<div style="font-weight: bold;font-size : 12px;">#delay_value# min</div>
+	</div>
+	<div class="col-xs-4">
+		<img  class="water" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/water.png"/>
+		<div style="font-weight: bold;font-size : 12px;">#water_value# %</div>
+	</div>
+-->
+</div>
+
+
+
+    <script>
+       
+        $('.cmd[data-cmd_id=#id#] .standby').on('click', function () {
+            jeedom.cmd.execute({id: '#standbyID#'});
+      });
+/*
+        $('.cmd[data-cmd_id=#id#] .delay').on('click', function () {
+            jeedom.cmd.execute({id: '#delayID#'});
+      });
+        $('.cmd[data-cmd_id=#id#] .water').on('click', function () {
+            jeedom.cmd.execute({id: '#waterID#'});
+      });
+*/
+    </script>
+
+
+</center>
 </div>
 
