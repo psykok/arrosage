@@ -42,7 +42,7 @@ image::../images/arrosage_tasker_conf.png[]
 Le tasker permet de gérer les taches qui permettront de lancer des cycles d'arrosage. +
 Toutes les zones associés à une tache seront activées l'une après l'autre avec un delais de 1min entre chaque zone si les conditions d'exécutions sont remplies. +
 
-Les différents paramètres d'une tâche sont:
+Les différents paramètres d'une tâche sont: +
 * Nom : nom de la tâche, +
 * Heure début : heure de départ du cycle au format HH:MM, +
 * Zone : liste des zones associées  ----- PAS ACTIF -----, +
@@ -54,9 +54,9 @@ Les différents paramètres d'une tâche sont:
 === Configuration de la centrale
 image::../images/arrosage_centrale_conf.png[]
 
-La centrale permet simplement d'avoir accès a certaines commandes et paramètres au niveau globale.
+La centrale permet simplement d'avoir accès a certaines commandes et paramètres au niveau globale. +
 
-Les différents paramètres de la centrale sont:
+Les différents paramètres de la centrale sont: +
 * Arrêt général : permet l'arrêt du système d'arrosage en totalité. +
 * Coef arrosage : permet d'ajuster le temps d'arrosage sur toutes les zones. +
 * Retard arrosage : permet de retarder l'exécution des cycles d'arrosage. +
