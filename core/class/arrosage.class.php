@@ -323,7 +323,7 @@ class arrosage extends eqLogic {
 	 log::add('arrosage', 'debug','manageMasterValve : called ');
 	 if ( config::byKey('masterValve','arrosage')  == 1){
 		
-		 log::add('arrosage', 'info','master valve is actionedi for '.$valveCMD);
+		 log::add('arrosage', 'info','master valve '.$valveCMD);
 	         //action the master valve
 	         $cmd_device=cmd::byId(trim(config::byKey('masterValve'.$valveCMD,'arrosage'),"#"));
 
@@ -344,13 +344,13 @@ class arrosage extends eqLogic {
   //function to close valve
   public function manageValve($valveCMD){
 	
-        log::add('arrosage', 'debug','closeValve : called ');
+        log::add('arrosage', 'debug','manageValve : called ');
 
 	//$cmd_device=cmd::byId(trim($this->getConfiguration('zoneStatus'),"#"));
 	//check if the valve is open
 	//if ( $cmd_device->getConfiguration('value') == 1){
 	
-	        log::add('arrosage', 'info',' closeValve : close valve');
+	        log::add('arrosage', 'info',' manageValve : close '.$valveCMD);
 	
 	        //close the valve
 	        $cmd_device=cmd::byId(trim($this->getConfiguration('zone'.$valveCMD),"#"));

@@ -4,36 +4,65 @@ image::../images/arrosage_plugin.png[]
 
 La Configuration du plugin permet de définir les équipements suivants si vous en êtes équipés. +
 - Sonde de pluie : information binaire, +
-- Sonde vent : information provenant du plugin weather ou d'un capteur, +
+- Sonde vent : information provenant du plugin Weather, +
+- Master Vanne : permet d'activer l'option,
 - Master vanne On : commande permettant d'ouvrir la vanne principale, +
 - Master Vanne Off : commande permettant de fermer la vanne principale, +
-- Master Vanne Status : retour d’état de la vanne principale. +
+- Master Vanne Status : retour d’état de la vanne principale, +
+- Weather Prévision +1 : Prevision à +1j du plugin Weather. + 
+
+La vanne principale est toujours actionnée en même temps qu'une zone.
 
 
 === Configuration des zones
 image::../images/arrosage_zone1.png[]
 image::../images/arrosage_zone1_conf.png[]
 
-
-Dans chaque zone il est possible de définir plusieurs cycles d'arrosage avec une heure de début, une durée et un jour d'execution. +
-
-Les cycles sont dépendants des paramètres d'arrosage que l'on a définis comme la vitesse du vent, la pluie... +
-Si l'un de ces paramètres est vérifié pendant ou avant l'execution d'un cycle, ce dernier est stoppé ou pas exécuté. +
-
-
 Les différents paramètres d'arrosage sont les suivants: +
+* Type arrosage : standard ou goute à goute, permet seulement de changer l'icône dans le widget, +
 * Hivernage : permet de mettre la zone en hivernage, tous les cycles sont stoppés, +
 * Arrêt si pluie : permet de stopper l'arrosage si de la pluie est détectée, +
-* Arrêt si vent : si la vitesse du vent est supérieur a la vitesse définie, l'arrosage est stoppé, +
+* Arrêt si vent : si la vitesse du vent est supérieur à la vitesse définie, l'arrosage est stoppé, +
 * Arrêt humidité : si l'humidité est supérieure au seuil fixé, l'arrosage est stoppé, +
 * Sonde humidité : définition de l’équipement pour la sonde d'humidité, +
-* Arrêt UV : si le taux d'uv est supérieur au seil fixé, l'arrosage est stoppé, +
-* Sonde UV : definition de l’équipement pour la sonde UV, +
+* Arrêt UV : si le taux d'uv est supérieur au seuil fixé, l'arrosage est stoppé, +
+* Sonde UV : définition de l’équipement pour la sonde UV, +
 * Commande On : commande d'ouverture de la vanne pour cette zone, +
 * Commande Off : commande de fermeture de la vanne pour cette zone, +
-* Commande Status : retour d’état de la vanne. +
+* Commande Status : retour d’état de la vanne, +
+* Durée : durée de l'arrosage en pour la zone en minute, +
+* Tache : permet de choisir la tache associé à cette zone ( à définir dans le Tasker). +
+
+Attention : le tasker et la centrale ne sont créés que lors de la création de la première zone.
+
+
+=== Configuration des taches
+image::../images/arrosage_tasker_conf.png[]
+
+Le tasker permet de gérer les taches qui permettront de lancer des cycles d'arrosage. +
+Toutes les zones associés à une tache seront activées l'une après l'autre avec un delais de 1min entre chaque zone si les conditions d'exécutions sont remplies. +
+
+Les différents paramètres d'une tâche sont:
+* Nom : nom de la tâche, +
+* Heure début : heure de départ du cycle au format HH:MM, +
+* Zone : liste des zones associées  ----- PAS ACTIF -----, +
+* Jours : jours d'activité de la tâche, +
+* Mois : mois d'activité de la tâche, +
+* Inactive : permet de désactiver une tâche. +
+
+
+=== Configuration de la centrale
+image::../images/arrosage_centrale_conf.png[]
+
+La centrale permet simplement d'avoir accès a certaines commandes et paramètres au niveau globale.
+
+Les différents paramètres de la centrale sont:
+* Arrêt général : permet l'arrêt du système d'arrosage en totalité. +
+* Coef arrosage : permet d'ajuster le temps d'arrosage sur toutes les zones. +
+* Retard arrosage : permet de retarder l'exécution des cycles d'arrosage. +
+* Pluie hier : permet de définir s'il a plu la veille, ce paramètre est géré automatiquement via les informations du plugin Weather mais il  peut être forcé.
+
 
 === Dashboard 
-image::../images/arrosage_off.png[]
-
+image::../images/arrosage_dashboard.png[]
 
