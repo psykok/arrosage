@@ -29,6 +29,7 @@ class arrosage extends eqLogic {
 	log::add('arrosage', 'debug','cron : log start' );
 
 	  //get water adj value and apply startup delay
+	log::add('arrosage', 'debug','cron : get value from eqLogic Master' );
         foreach (eqLogic::byType('arrosage_master') as $obMaster) {
                $waterAdjValue=$obMaster->getConfiguration('waterAdj');
                $standbyValue=$obMaster->getConfiguration('masterStop');
@@ -37,8 +38,9 @@ class arrosage extends eqLogic {
              //  $startTime = date('H:i',strtotime($startTime . '+ '.$startDelay .' minute'));
         }
 
+       log::add('arrosage', 'debug','cron : check if master standby is active' );
        if ( $standbyValue == 1){
-               log::add('arrosage', 'info','master : standby' );
+              log::add('arrosage', 'info','cron : master standby on' );
               return 1;
        }
 
@@ -47,66 +49,73 @@ class arrosage extends eqLogic {
 	$weatherInt=0;
 	$weatherH1Status=0;
 	$weatherH0Status=0;
-	
-	//get weather plugin ID
-	$weatherId=cmd::byId(trim(config::byKey('weatherH1','arrosage'),"#"))->getEqLogic_id();
-	log::add('arrosage', 'debug','weather weather_id : '.$weatherId);
-	
-	//get H+1 rain prevision
-	$weatherH1Status=cmd::byEqLogicIdAndLogicalId($weatherId,'condition_id_1')->execCmd();
-	log::add('arrosage', 'debug','weather condition_id_1 : '.$weatherH1Status);
-	
-	//get day rain prevision
-	$weatherH0Status=cmd::byEqLogicIdAndLogicalId($weatherId,'condition_id')->execCmd();
-	log::add('arrosage', 'debug','weather condition_id_1 : '.$weatherH0Status);
-	
-	//check if rain is comming
-	if (($weatherH0Status >= 500 && $weatherH0Status <= 599) || ($weatherH1Status >= 500 && $weatherH1Status <= 599)){
-	        $weatherInt=1;
-		log::add('arrosage', 'info','weather : rain is comming');
-	}
-	
-	 if (($weatherH0Status >= 200 && $weatherH0Status <= 299) || ($weatherH1Status >= 200 && $weatherH1Status <= 299)){
-	        $weatherInt=1;
-		log::add('arrosage', 'info','weather : storm is comming');
-	}
+	$weatherId="";
+	$weatherH1Id="";
 
-        if ($rainYD == 1){
-                log::add('arrosage', 'info','weather : we had rain yesterday');
+	//check if weather prevision +1 has been  configured 
+	log::add('arrosage', 'debug','cron : check if weather is used' );
+	$weatherH1Id=config::byKey('weatherH1','arrosage');
+	if($weatherH1Id != "" ){
+		 log::add('arrosage', 'debug','weather usage on ');
 
-                $weatherInt=1;
-        }
-
-
-	//save the day rain prevision just before midnight
-	if (($weatherH0Status >= 200 && $weatherH0Status <= 299) ||($weatherH0Status >= 500 && $weatherH0Status <= 599)){
-		$rainTD=1;
-	}
-	else{
-		$rainTD=0;
-	}	
-	$rainCron="59 23 * * *";
-	try {
-		$cStop = new Cron\CronExpression($rainCron, new Cron\FieldFactory);
-		if ($cStop->isDue()) {
-				$obMaster->setConfiguration('rainYD',$rainTD);	
-				$obMaster->save();
-		                log::add('arrosage', 'info','weather : save day prevision');
+		//get weather plugin ID
+		$weatherId=cmd::byId(trim($weatherH1Id,"#"))->getEqLogic_id();
+		log::add('arrosage', 'debug','weather weather_id : '.$weatherId);
 		
+		//get H+1 rain prevision
+		$weatherH1Status=cmd::byEqLogicIdAndLogicalId($weatherId,'condition_id_1')->execCmd();
+		log::add('arrosage', 'debug','weather condition_id_1 : '.$weatherH1Status);
 		
-		     }
-		} catch (Exception $exc) {
-	          log::add('arrosage', 'error', __('Expression cron non valide pour ', __FILE__) . ' rainCron : ' . $rainCron);
-	  }
-
-	//if rain exit
-        if ($weatherInt == 1){
-                log::add('arrosage', 'info','weather prevision : enough rain, no irrigation needed ');
-                return 1;
-        }
-
+		//get day rain prevision
+		$weatherH0Status=cmd::byEqLogicIdAndLogicalId($weatherId,'condition_id')->execCmd();
+		log::add('arrosage', 'debug','weather condition_id_1 : '.$weatherH0Status);
+		
+		//check if rain is comming
+		if (($weatherH0Status >= 500 && $weatherH0Status <= 599) || ($weatherH1Status >= 500 && $weatherH1Status <= 599)){
+		        $weatherInt=1;
+			log::add('arrosage', 'info','weather : rain is comming');
+		}
+		
+		 if (($weatherH0Status >= 200 && $weatherH0Status <= 299) || ($weatherH1Status >= 200 && $weatherH1Status <= 299)){
+		        $weatherInt=1;
+			log::add('arrosage', 'info','weather : storm is comming');
+		}
+	
+	        if ($rainYD == 1){
+	                log::add('arrosage', 'info','weather : we had rain yesterday');
+	
+	                $weatherInt=1;
+	        }
+	
+	
+		//save the day rain prevision just before midnight
+		if (($weatherH0Status >= 200 && $weatherH0Status <= 299) ||($weatherH0Status >= 500 && $weatherH0Status <= 599)){
+			$rainTD=1;
+		}
+		else{
+			$rainTD=0;
+		}	
+		$rainCron="59 23 * * *";
+		try {
+			$cStop = new Cron\CronExpression($rainCron, new Cron\FieldFactory);
+			if ($cStop->isDue()) {
+					$obMaster->setConfiguration('rainYD',$rainTD);	
+					$obMaster->save();
+			                log::add('arrosage', 'info','weather : save day prevision');
+			
+			
+			     }
+			} catch (Exception $exc) {
+		          log::add('arrosage', 'error', __('Expression cron non valide pour ', __FILE__) . ' rainCron : ' . $rainCron);
+		  }
+	
+		//if rain exit
+	        if ($weatherInt == 1){
+	                log::add('arrosage', 'info','weather prevision : enough rain, no irrigation needed ');
+	                return 1;
+	        }
+	}
 	foreach (cmd::byLogicalId('task') as $cmdTask) {
-		
 		
         	$startTime =  $cmdTask->getConfiguration('startTime');
         	$disableTask = $cmdTask->getConfiguration('cbDisable');
@@ -184,7 +193,7 @@ class arrosage extends eqLogic {
 
        				        // log::add('arrosage', 'info','rain stop : ' .  $cmd_device->getConfiguration('value'));
 
-       				         if ( $cmd_device->getConfiguration('value') == 1){
+       				         if ( $cmd_device->execCmd() == 1){
        				                $stopTask = 1;
 						log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : rain control active');
        				         }
@@ -205,7 +214,7 @@ class arrosage extends eqLogic {
        				 if ( $moistureStopStatus == 1 ){
        				         $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('moistureSensor'),"#"));
 
-       				         $moistureValue=$cmd_device->getConfiguration('value');
+       				         $moistureValue=$cmd_device->execCmd();
        				         $moistureMaxValue=$eqLogic->getConfiguration('moistureMax');
        				         $moistureMinValue=$eqLogic->getConfiguration('moistureMin');
 
@@ -219,7 +228,7 @@ class arrosage extends eqLogic {
        				 if ( $uvStopStatus == 1 ){
        				         $cmd_device=cmd::byId(trim($eqLogic->getConfiguration('uvSensor'),"#"));
 
-       				         $uvValue=$cmd_device->getConfiguration('value');
+       				         $uvValue=$cmd_device->execCmd();
        				         $uvMaxValue=$eqLogic->getConfiguration('uvMax');
 //     				           $moistureMinValue=$eqLogic->getConfiguration('uvMin');
 
@@ -462,7 +471,7 @@ class arrosage extends eqLogic {
 	}
 
         //check if the valve status
-	if ( $cmd_device->getConfiguration('value') == 1){	
+	if ( $cmd_device->execCmd() == 1){	
 	   $replace['#cmd_stat#'] = 'icon_'.$iconeType.'_on';
 	}else {
            $replace['#cmd_stat#'] = 'icon_'.$iconeType.'_off';
@@ -594,10 +603,13 @@ class arrosage extends eqLogic {
 	public function doZoneAction(){
                 log::add('arrosage', 'debug','doZoneAction : command zone action' );
 
-
+		log::add('arrosage', 'debug','doZoneAction : zoneStatus device ID : '.$this->getConfiguration('zoneStatus') );
 		$cmd_device=cmd::byId(trim($this->getConfiguration('zoneStatus'),"#"));
                 //check if the valve is open
-                if ( $cmd_device->getConfiguration('value') == 1){
+                
+
+		log::add('arrosage', 'debug','doZoneAction : zoneStatus device value : '.$cmd_device->execCmd() );
+		if ( $cmd_device->execCmd() == 1){
 
 			//close the valve
                         $this->manageValve('Off');
