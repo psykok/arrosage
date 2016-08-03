@@ -38,6 +38,12 @@ class arrosage extends eqLogic {
              //  $startTime = date('H:i',strtotime($startTime . '+ '.$startDelay .' minute'));
         }
 
+	//get configuration varial for eqlogic: tasker
+	 log::add('arrosage', 'debug','cron : get value from eqLogic tasker' );
+        foreach (eqLogic::byType('arrosage_tasker') as $obTasker) {
+               $zoneDelay=$obTasker->getConfiguration('delayBtwZone');
+	}
+
        log::add('arrosage', 'debug','cron : check if master standby is active' );
        if ( $standbyValue == 1){
               log::add('arrosage', 'info','cron : master standby on' );
@@ -108,7 +114,9 @@ class arrosage extends eqLogic {
 			} catch (Exception $exc) {
 		          log::add('arrosage', 'error', __('Expression cron non valide pour ', __FILE__) . ' rainCron : ' . $rainCron);
 		  }
-	
+
+
+		//$weatherInt=0;	
 		//if rain exit
 	        if ($weatherInt == 1){
 	                log::add('arrosage', 'info','weather prevision : enough rain, no irrigation needed ');
@@ -314,7 +322,7 @@ class arrosage extends eqLogic {
 
 
 				//save last stop time as new start time + 1min to have a short pause 
-				$startTime=date('H:i',strtotime($stopTime. '+ 1 minute'));
+				$startTime=date('H:i',strtotime($stopTime. '+ '. $zoneDelay .' minute'));
 			}
 
 			

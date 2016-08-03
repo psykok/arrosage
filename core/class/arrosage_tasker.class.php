@@ -69,6 +69,22 @@ class arrosage_tasker extends eqLogic {
                // cache::set('arrosageWidget' . $_version . $this->getId(), $html, 0);
                 return $html;
 	}
+	
+	 public function preSave() {
+
+                //check if the delay beteen the zone is >0 and <5min
+		$zoneDelay= $this->getConfiguration('delayBtwZone');
+
+                if ($zoneDelay < 0){
+                              throw new Exception(__('Le temps doit etre superieur ou égal 0min', __FILE__));
+                }
+                if ($zoneDelay > 5){
+                              throw new Exception(__('Le temps doit etre inférieur ou égal 5min', __FILE__));
+                }
+
+        }
+
+
 
 }
 
@@ -143,6 +159,9 @@ class arrosage_taskerCmd extends cmd {
                 if ($monthStat == 0) {
                         throw new Exception(__('Un mois doit être selectionné', __FILE__));
                 }
+
+
+		
 
         }
 	public function isTime($time)
