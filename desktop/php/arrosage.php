@@ -271,8 +271,8 @@ $eqLogics = eqLogic::byType('arrosage');
                                                 foreach (cmd::byLogicalId('task') as $cmdTask) {
 						echo '<div>';
 						echo '<label><input class="eqLogicAttr"  data-l1key="configuration" data-l2key="'.$cmdTask->getName().'" type="checkbox" name="startDays" id="mon" valu=="' .  $cmdTask->getId() . '">' .  $cmdTask->getName() . '</label>';
-                                                 }
 						echo '</div>';
+						}
                                          ?>
 			     </div>
                         </div>
