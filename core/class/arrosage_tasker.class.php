@@ -33,34 +33,39 @@ class arrosage_tasker extends eqLogic {
                         return '';
                 }
 		$cmd_list='';	
-		 $replace['#id#'] = $this->getId();                                                                                                                                                        
+		$replace['#id#'] = $this->getId();                                                                                                                                                        
                 $replace['#eqLink#'] = $this->getLinkToConfiguration();                                                                                         
                 $replace['#zoneName#'] = $this->getName(); 
+		$version = jeedom::versionAlias($_version);
 
 		foreach (cmd::byEqLogicId($this->getId()) as $cmd_def) {
 	//      	log::add('arrosage', 'info','dashboard cmd : '.$cmd_def->getHumanName() );
 	 
 	        	$cmd_name = $cmd_def->getName();
 	        	$cmd_start = $cmd_def->getConfiguration('startTime');
-			$cmd_list .= '<tr><td id="tab">' . $cmd_name .'</td><td  id="tab">'.$cmd_start.'</td><td  id="tab_day">';
-			$cmd_list .= '<table id="days"><tr>';
-			 for ($i = 1; $i <= 7 ;$i++)
-	                 {
-				$tdstyle=' style="background-color: none;color:white;"';
-	                        if ($cmd_def->getConfiguration('cbDay'.$i) == 1) {
-					$tdstyle=' style="background-color: white;color:#19bc9c;"';
-	                        }
-				$shortDayName=array(1 => "L","M","M","J","V","S","D");
-				$cmd_list .=  '<td'.$tdstyle.'>'.$shortDayName[$i].'</td>';
-	                 }
+			$cmd_list .= '<tr><td id="tab">' . $cmd_name .'</td><td  id="tab">'.$cmd_start.'</td>';
 			
+	                if ($version != 'mobile') {
+				$cmd_list .= '<td  id="tab_day">';
+				$cmd_list .= '<table id="days"><tr>';
+				 for ($i = 1; $i <= 7 ;$i++)
+		                 {
+					$tdstyle=' style="background-color: none;color:white;"';
+		                        if ($cmd_def->getConfiguration('cbDay'.$i) == 1) {
+						$tdstyle=' style="background-color: white;color:#19bc9c;"';
+		                        }
+					$shortDayName=array(1 => "L","M","M","J","V","S","D");
+					$cmd_list .=  '<td'.$tdstyle.'>'.$shortDayName[$i].'</td>';
+		                 }
+			$cmd_list .= " </tr></table></td>";
+			}			
 
-			$cmd_list .= " </tr></table></td></tr>";
+			$cmd_list .= "</tr>";
 		
 		}
 		$replace['#cmd_list#'] = $cmd_list;
 		
-		$html = template_replace($replace, getTemplate('core', $_version, 'tasker', 'arrosage'));
+		$html = template_replace($replace, getTemplate('core', $version, 'tasker', 'arrosage'));
                // cache::set('arrosageWidget' . $_version . $this->getId(), $html, 0);
                 return $html;
 	}
