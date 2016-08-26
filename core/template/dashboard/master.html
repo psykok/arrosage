@@ -15,14 +15,17 @@
 
 <center>
 <div class="cmd" data-type="action" data-subtype="other" data-cmd_id="#id#" data-cmd_uid="#uid#">
-	<div  class="col-xs-4">
+	<div  class="col-xs-3">
                 <img  class="standby" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/#standbyIcone#.png"/> 
 	</div>
-	<div class="col-xs-4">
+	<div  class="col-xs-3">
+                <img  class="check" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/#checkIcone#.png"/>
+        </div>
+	<div class="col-xs-3">
 		<img  class="delay" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/delay.png"/>
 		<div style="font-weight: bold;font-size : 12px;">#delay_value# min</div>
 	</div>
-	<div class="col-xs-4">
+	<div class="col-xs-3">
 		<img  class="water" style="height:40px;width:40px; margin:10px;" src="plugins/arrosage/core/template/images/water.png"/>
 		<div style="font-weight: bold;font-size : 12px;">#water_value# %</div>
 	</div>
@@ -38,6 +41,9 @@
        
         $('.cmd[data-cmd_id=#id#] .standby').on('click', function () {
             jeedom.cmd.execute({id: '#standbyID#'});
+      });
+        $('.cmd[data-cmd_id=#id#] .check').on('click', function () {
+            jeedom.cmd.execute({id: '#checkID#'});
       });
         $('.cmd[data-cmd_id=#id#] .delay').on('click', function () {
             jeedom.cmd.execute({id: '#delayID#'});

@@ -31,9 +31,10 @@ class arrosage extends eqLogic {
 	  //get water adj value and apply startup delay
 	log::add('arrosage', 'debug','cron : get value from eqLogic Master' );
         foreach (eqLogic::byType('arrosage_master') as $obMaster) {
-               $waterAdjValue=$obMaster->getConfiguration('waterAdj');
-               $standbyValue=$obMaster->getConfiguration('masterStop');
-               $startDelay=$obMaster->getConfiguration('delayAdj');
+                $waterAdjValue=$obMaster->getConfiguration('waterAdj');
+                $standbyValue=$obMaster->getConfiguration('masterStop');
+                $startDelay=$obMaster->getConfiguration('delayAdj');
+		$checkValue=$obMaster->getConfiguration('checkWeather');	
                 $rainYD=$obMaster->getConfiguration('rainYD');
              //  $startTime = date('H:i',strtotime($startTime . '+ '.$startDelay .' minute'));
         }
@@ -61,7 +62,7 @@ class arrosage extends eqLogic {
 	//check if weather prevision +1 has been  configured 
 	log::add('arrosage', 'debug','cron : check if weather is used' );
 	$weatherH1Id=config::byKey('weatherH1','arrosage');
-	if($weatherH1Id != "" ){
+	if($weatherH1Id != "" && $checkValue == 1 ){
 		 log::add('arrosage', 'debug','weather usage on ');
 
 		//get weather plugin ID
@@ -115,13 +116,13 @@ class arrosage extends eqLogic {
 		          log::add('arrosage', 'error', __('Expression cron non valide pour ', __FILE__) . ' rainCron : ' . $rainCron);
 		  }
 
-
+		//************** moved to cron section **************
 		//$weatherInt=0;	
 		//if rain exit
-	        if ($weatherInt == 1){
-	                log::add('arrosage', 'info','weather prevision : enough rain, no irrigation needed ');
-	                return 1;
-	        }
+	       // if ($weatherInt == 1){
+	       //         log::add('arrosage', 'info','weather prevision : enough rain, no irrigation needed ');
+	       //         return 1;
+	       // }
 	}
 	foreach (cmd::byLogicalId('task') as $cmdTask) {
 		
@@ -287,17 +288,32 @@ class arrosage extends eqLogic {
    			          try {
    			             $c = new Cron\CronExpression($startCron, new Cron\FieldFactory);
    			             if ($c->isDue()) {
-   			                     try {
-   			                       log::add('arrosage', 'info','Cron added############################################## ' );
-   			                       //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
 
-							log::add('arrosage', 'info','cron : zone : '.$zoneName.' : zone on');
+					     
+				                //$weatherInt=0;
+				                //if rain exit
+				                if ($weatherInt == 1){
+				                        log::add('arrosage', 'info','weather prevision : enough rain, no irrigation needed ');
+				                        //return 1;
+				                }else{
 
-   			                             $eqLogic->manageValve('On');
+   			                    		 try {
+   			                    		   log::add('arrosage', 'info','Cron added############################################## ' );
+   			                    		   //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
 
-   			                     } catch (Exception $exc) {
-   			                             log::add('arrosage', 'error', __('Erreur pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $exc->getMessage());
-   			                     }
+					    		    log::add('arrosage', 'info','cron : zone : '.$zoneName.' : zone on');
+
+   			                    		    $eqLogic->manageValve('On');
+					    		    
+					    		    //savev start and stop time in the zone configuration
+					    		    $eqLogic->setConfiguration('startTime',$startTime);
+					    		    $eqLogic->setConfiguration('stopTime',$stopTime);
+					    		    $eqLogic->save();
+
+   			                    		 } catch (Exception $exc) {
+   			                    		         log::add('arrosage', 'error', __('Erreur pour ', __FILE__) . $eqLogic->getHumanName() . ' : ' . $exc->getMessage());
+   			                    		 }
+						}
    			             }
 
 
@@ -432,6 +448,19 @@ class arrosage extends eqLogic {
   }
 
 
+  public function timeDiff($firstTime,$lastTime)
+  {
+  
+  	// convert to unix timestamps
+  	$firstTime=strtotime($firstTime);
+  	$lastTime=strtotime($lastTime);
+  	
+  	// perform subtraction to get the difference (in seconds) between times
+  	$timeDiff= round(abs($lastTime-$firstTime)/60,2);
+  	
+  	// return the difference
+  	return $timeDiff;
+  }
 
 
 
@@ -449,10 +478,17 @@ class arrosage extends eqLogic {
 */
         $html_forecast = '';
 	$cmd_list = '';
+	$zonePB = '';
+
         $replace['#id#'] = $this->getId();
 	$replace['#eqLink#'] = $this->getLinkToConfiguration();
 	$replace['#zoneName#'] = $this->getName();
-	$replace['#duration#'] = $this->getConfiguration('zoneDuration');	
+	$zoneDuration = $this->getConfiguration('zoneDuration');
+	$replace['#duration#'] = "Durée : ". $zoneDuration;	
+
+	$startTime = $this->getConfiguration('startTime');
+	$stopTime = $this->getConfiguration('stopTime');
+	$currentTime = date("H:i");
 
 	$cmd_device=cmd::byId(trim($this->getConfiguration('zoneStatus'),"#"));
 
@@ -460,17 +496,6 @@ class arrosage extends eqLogic {
                         $replace['#'.$cmd_def->getLogicalId().'ID#'] =  $cmd_def->getId();
                 }
 
-/*
-        foreach (cmd::byEqLogicId($this->getId()) as $cmd_def) {
- 
-           $cmd_name = $cmd_def->getName();
-           $cmd_start = $cmd_def->getConfiguration('startTime');
-           $cmd_duration = $cmd_def->getConfiguration('duration');
-	   $cmd_list .= '<div style="font-weight: bold;font-size : 12px;#hideCmdName#">' . $cmd_name ." : ".$cmd_start." for ".$cmd_duration." min</div>";
-	
-	}
-	$replace['#cmd_list#'] = $cmd_list;
-*/
 	//set the right icone for the widget
 	if (  $this->getConfiguration('zoneType') == "drip" ) {
 		$iconeType="drip";
@@ -481,9 +506,27 @@ class arrosage extends eqLogic {
         //check if the valve status
 	if ( $cmd_device->execCmd() == 1){	
 	   $replace['#cmd_stat#'] = 'icon_'.$iconeType.'_on';
+
+	   //get the elapsed time
+           $elapsTime = $this->timeDiff($startTime, $currentTime);
+
+	   //calculate the percentage of the elapsed time
+           $elapsePCT = round((100 * $elapsTime)/$zoneDuration);
+	
+	   //bluid the progressbar and task info
+	   $zonePB = $zonePB . '<p>Départ : '.$startTime.'</p>';
+	   $zonePB = $zonePB . '<p>Arret : '.$stopTime.'</p>';
+
+           $zonePB = $zonePB . '<div class="text-xs-center" id="example-caption-1">Arrosage depuis ' .$elapsTime. 'min</div>';
+           $zonePB = $zonePB . '<div class="progress"  style="width:300px">';
+           $zonePB = $zonePB . '<div class="progress-bar" role="progressbar" aria-valuenow="'.$elapsePCT.'" aria-valuemin="0" aria-valuemax="100" style="width:'.$elapsePCT.'%">';
+           $zonePB = $zonePB . '</div> </div>';
+	   
 	}else {
            $replace['#cmd_stat#'] = 'icon_'.$iconeType.'_off';
 	}
+
+        $replace['#zonePB#'] = $zonePB;
 
         //check if the rain dectection is activated
         if ( $this->getConfiguration('winterMode') == 0 ){
@@ -518,6 +561,9 @@ class arrosage extends eqLogic {
        // cache::set('arrosageWidget' . $_version . $this->getId(), $html, 0);
         return $html;
   }
+
+	
+
 
 	public function preSave() {
 

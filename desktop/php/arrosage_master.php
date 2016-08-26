@@ -46,6 +46,14 @@
 		       		</div>
 		       </div>
 
+                       <div class="form-group">
+                                <label class="col-sm-2 control-label">{{Check météo}}</label>
+                                <div class="col-sm-6">
+                                    <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='checkWeather' />
+                                </div>
+                       </div>
+
+
 			<div class="form-group">
 		                <label class="col-sm-2 control-label">{{Coef arrosage : }}</label>
         		 	<div class="col-sm-2">

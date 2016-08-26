@@ -32,7 +32,7 @@ class arrosage_master extends eqLogic {
             		return '';
 		}
 		
-
+		//check standby status
 		$standbySatus=$this->getConfiguration('masterStop');                                                                                                                                      
                                                                                                                                                                 
                 if($standbySatus == 1){                                                                                                                                                                   
@@ -42,7 +42,18 @@ class arrosage_master extends eqLogic {
 			$replace['#standbyIcone#'] = 'standby_off';
                 }                                                      
 
-	        $html_forecast = '';
+
+                //check if weather check is activated
+                $checkSatus=$this->getConfiguration('checkWeather');
+
+                if($checkSatus == 1){
+                        $replace['#checkIcone#'] = 'check_on';
+                }
+                else if($checkSatus == 0){
+                        $replace['#checkIcone#'] = 'check_off';
+                }
+
+	        $html = '';
 	        $replace['#id#'] = $this->getId();
         	$replace['#eqLink#'] = $this->getLinkToConfiguration();
 	        $replace['#zoneName#'] = $this->getName();
@@ -109,44 +120,63 @@ class arrosage_master extends eqLogic {
 
 	public function postInsert(){
 		if(count(cmd::byLogicalId('standby')) == 0) {
+			//create cmd standby
+			$masterCmd = new arrosage_masterCmd();
+			$masterCmd->setName('Standby');
+			$masterCmd->setLogicalId('standby');
+			$masterCmd->setEqLogic_id($this->id);
+			$masterCmd->setType('action');
+			$masterCmd->setSubType('other');
+			$masterCmd->setOrder(0);
+			$masterCmd->save();
+		}
 
-		//create cmd standby
-		$masterCmd = new arrosage_masterCmd();
-		$masterCmd->setName('Standby');
-		$masterCmd->setLogicalId('standby');
-		$masterCmd->setEqLogic_id($this->id);
-		$masterCmd->setType('action');
-		$masterCmd->setSubType('other');
-		$masterCmd->save();
+                if(count(cmd::byLogicalId('delay')) == 0) {
+                	//create cmd delay
+                	$masterCmd = new arrosage_masterCmd();
+                	$masterCmd->setName('Delay');
+                	$masterCmd->setLogicalId('delay');
+                	$masterCmd->setEqLogic_id($this->id);
+                	$masterCmd->setType('action');
+                	$masterCmd->setSubType('other');
+			$masterCmd->setOrder(1);
+                	$masterCmd->save();
+		}
 
+		if(count(cmd::byLogicalId('water')) == 0) {
+                	//create cmd water
+                	$masterCmd = new arrosage_masterCmd();
+                	$masterCmd->setName('Water');
+                	$masterCmd->setLogicalId('water');
+                	$masterCmd->setEqLogic_id($this->id);
+                	$masterCmd->setType('action');
+                	$masterCmd->setSubType('other');
+			$masterCmd->setOrder(2);
+                	$masterCmd->save();
+		}
 
-                //create cmd delay
-                $masterCmd = new arrosage_masterCmd();
-                $masterCmd->setName('Delay');
-                $masterCmd->setLogicalId('delay');
-                $masterCmd->setEqLogic_id($this->id);
-                $masterCmd->setType('action');
-                $masterCmd->setSubType('other');
-                $masterCmd->save();
+		if(count(cmd::byLogicalId('master')) == 0) {	
+			//create cmd water
+                	$masterCmd = new arrosage_masterCmd();
+                	$masterCmd->setName('Master');
+                	$masterCmd->setLogicalId('master');
+                	$masterCmd->setEqLogic_id($this->id);
+                	$masterCmd->setType('action');
+                	$masterCmd->setSubType('other');
+			$masterCmd->setOrder(3);
+                	$masterCmd->save();
+		}
 
-                //create cmd water
-                $masterCmd = new arrosage_masterCmd();
-                $masterCmd->setName('Water');
-                $masterCmd->setLogicalId('water');
-                $masterCmd->setEqLogic_id($this->id);
-                $masterCmd->setType('action');
-                $masterCmd->setSubType('other');
-                $masterCmd->save();
-		
-		//create cmd water
-                $masterCmd = new arrosage_masterCmd();
-                $masterCmd->setName('Master');
-                $masterCmd->setLogicalId('master');
-                $masterCmd->setEqLogic_id($this->id);
-                $masterCmd->setType('action');
-                $masterCmd->setSubType('other');
-                $masterCmd->save();
-
+                if(count(cmd::byLogicalId('master')) == 0) {
+			 //create cmd water
+                	$masterCmd = new arrosage_masterCmd();
+                	$masterCmd->setName('checkWeather');
+                	$masterCmd->setLogicalId('checkWeather');
+                	$masterCmd->setEqLogic_id($this->id);
+                	$masterCmd->setType('action');
+                	$masterCmd->setSubType('other');
+			$masterCmd->setOrder(4);
+                	$masterCmd->save();
 		}
 
 
@@ -156,6 +186,8 @@ class arrosage_master extends eqLogic {
 	public function doStandby(){
 		log::add('arrosage', 'info','command: standby' );
 		$standbySatus=$this->getConfiguration('masterStop');
+
+                log::add('arrosage', 'debug','masterStop='. $checkStatus );
 
 		if($standbySatus == 1){
 			$this->setConfiguration('masterStop',0);
@@ -171,6 +203,26 @@ class arrosage_master extends eqLogic {
                 	$eqLogic->manageValve('Off');
         	}
 
+
+	}
+
+
+	//activate or desactivate the check of the weather status
+	public function doCheckWeather(){
+		 log::add('arrosage', 'info','command: checkWeather' );
+		$checkStatus=$this->getConfiguration('checkWeather');
+
+
+                log::add('arrosage', 'debug','checkWeather='. $checkStatus );
+
+		 if($checkStatus == 1){
+                        $this->setConfiguration('checkWeather',0);
+                }
+                else if($checkStatus == 0){
+                        $this->setConfiguration('checkWeather',1);
+                }
+                $this->save();
+                $this->refreshWidget();
 
 	}
 
@@ -213,12 +265,15 @@ class arrosage_master extends eqLogic {
 }
 class arrosage_masterCmd extends cmd {
 
-
 	public function execute($_options = array()) {
+                log::add('arrosage', 'debug','command ID: ' . $this->getLogicalId() );
+
 		if ($this->getLogicalId() == 'standby') {
 			$this->getEqLogic()->doStandby();
 		}
-		
+		if ($this->getLogicalId() == 'check') {
+                        $this->getEqLogic()->doCheckWeather();
+                }
 		if ($this->getLogicalId() == 'delay') {
 			$this->getEqLogic()->doDelayAdj();
                 }
@@ -229,7 +284,6 @@ class arrosage_masterCmd extends cmd {
 		 if ($this->getLogicalId() == 'master') {
                         $this->getEqLogic()->doMaster();
                 }
-
 
 		return false;
 	}
