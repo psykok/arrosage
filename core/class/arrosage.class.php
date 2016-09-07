@@ -593,10 +593,10 @@ class arrosage extends eqLogic {
                 }
 	
 
-		//check if the duration is greater as 0	
+		//check if the duration is greater as 3 	
 		$zoneDurationValue=$this->getConfiguration('zoneDuration');
-		if ( $zoneDurationValue < 0){
-			 throw new Exception(__('La durée doit être superieur à 0' , __FILE__));
+		if ( $zoneDurationValue < 2){
+			 throw new Exception(__('La durée doit être superieur à 3min' , __FILE__));
 		}
 		
 
