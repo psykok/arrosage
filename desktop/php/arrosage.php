@@ -259,7 +259,7 @@ $eqLogics = eqLogic::byType('arrosage');
                 	    <label class="col-sm-2 control-label">{{Durée}}</label>
                 	    <div class="col-sm-2">
                 	    <div class="input-group"  style="width : 150px;">
-                	        <input class="eqLogicAttr form-control" type="number" min="0" step="5" data-l1key="configuration" data-l2key="zoneDuration" placeholder="{{0}}">
+                	        <input class="eqLogicAttr form-control" type="number" min="5" step="5" data-l1key="configuration" data-l2key="zoneDuration" placeholder="{{5}}">
                 	        <div class="input-group-addon">min</div>
                 	    </div>
 			    </div>
