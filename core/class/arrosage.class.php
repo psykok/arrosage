@@ -179,7 +179,9 @@ class arrosage extends eqLogic {
        				 $moistureStopStatus = $eqLogic->getConfiguration('moistureStop');
        				 $uvStopStatus =  $eqLogic->getConfiguration('uvStop');
 				 $zoneName = $eqLogic->getName();
-
+				
+				//refresh widget
+				$eqLogic->refreshWidget();
 
        				 $stopTask = 0;
 
@@ -305,7 +307,7 @@ class arrosage extends eqLogic {
 
    			                    		    $eqLogic->manageValve('On');
 					    		    
-					    		    //savev start and stop time in the zone configuration
+					    		    //save start and stop time in the zone configuration
 					    		    $eqLogic->setConfiguration('startTime',$startTime);
 					    		    $eqLogic->setConfiguration('stopTime',$stopTime);
 					    		    $eqLogic->save();
