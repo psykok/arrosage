@@ -71,9 +71,9 @@ function addCmdToTableArrosageMaster(_cmd) {
     tr += '<td>';                                                                                                                                                                                         
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="id" style="display : none;">';                                                              
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" disabled ></td>';         
-  tr += '<td></td>';
+    tr += '<td></td>';
 
-   tr += '<td>';
+    tr += '<td>';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="action" style="display : none;">';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="subType" value="superbox" style="display : none;">';
     if (is_numeric(_cmd.id)) {
@@ -104,7 +104,7 @@ function addCmdToTableArrosage(_cmd) {
  //tr += toto.name ;
 
 
-   tr += '</td>';
+    tr += '</td>';
 
     tr += '<td>';
     tr += '<label class="checkbox-inline" style="margin-right:1em;"><input class="cmdAttr" data-l1key="configuration" data-l2key="cbDay1" type="checkbox" name="startDays" id="mon" value="1">L</label>';
@@ -143,9 +143,9 @@ function addCmdToTableArrosage(_cmd) {
     tr += '</td>';
 
 
-   tr += '<td>';
+    tr += '<td>';
     tr += '<input class="cmdAttr" data-l1key="configuration" data-l2key="cbDisable" type="checkbox" name="taskDisable"  value="1">';
-  tr += '</td>';
+    tr += '</td>';
 
  
     tr += '<td>';
@@ -159,7 +159,7 @@ function addCmdToTableArrosage(_cmd) {
     tr += '</tr>';
 
     table_cmd = '#table_cmd';
-//    table_cmd+= '_'+_cmd.eqType;
+//  table_cmd+= '_'+_cmd.eqType;
 
 
     $(table_cmd+' tbody').append(tr);

@@ -1,6 +1,6 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - AccÃ¨s non autorisé}}');
+	throw new Exception('{{401 - Accès non autorisé}}');
 }
 sendVarToJS('eqType', 'arrosage');
 $eqLogics = eqLogic::byType('arrosage');
@@ -13,12 +13,15 @@ $eqLogics = eqLogic::byType('arrosage');
                 <a class="btn btn-default eqLogicAction" style="width : 100%;margin-top : 5px;margin-bottom: 5px;" data-action="add"><i class="fa fa-plus-circle"></i> {{Ajouter Zone}}</a>
                 <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
                 <?php
+			//Arrosage zone
 			foreach ($eqLogics as $eqLogic) {
 				echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
 			}
-			 foreach (eqLogic::byType('arrosage_master') as $eqLogic) {
+                        //Arroasge master control
+			foreach (eqLogic::byType('arrosage_master') as $eqLogic) {
 				echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage_master"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
 			}
+			//Arrosage taske central
 			foreach (eqLogic::byType('arrosage_tasker') as $eqLogic) {
                                 echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage_tasker"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
                         }
@@ -29,8 +32,12 @@ $eqLogics = eqLogic::byType('arrosage');
 
    <div class="col-lg-10 col-md-9 col-sm-8 eqLogicThumbnailDisplay" style="border-left: solid 1px #EEE; padding-left: 25px;">
 
+
+
    <legend><i class="fa fa-cog"></i>  {{Gestion}}</legend>
    <div class="eqLogicThumbnailContainer">
+
+   <!-- Add zone button -->
     <div class="cursor eqLogicAction" data-action="add" style="background-color : #ffffff; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
      <center>
       <i class="fa fa-plus-circle" style="font-size : 5em;color:#94ca02;"></i>
@@ -41,7 +48,8 @@ $eqLogics = eqLogic::byType('arrosage');
 
 
 
-<div class="cursor eqLogicAction" data-action="gotoPluginConf" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
+  <!-- Plugin configuration button -->
+  <div class="cursor eqLogicAction" data-action="gotoPluginConf" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
     <center>
       <i class="fa fa-wrench" style="font-size : 5em;color:#767676;"></i>
     </center>
@@ -49,6 +57,7 @@ $eqLogics = eqLogic::byType('arrosage');
   </div>
 
 	<?php
+		//Arroasge master control
 		foreach (eqLogic::byType('arrosage_master') as $eqLogic) {
 		        echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 		        echo "<center>";
@@ -57,7 +66,7 @@ $eqLogics = eqLogic::byType('arrosage');
 		        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
 		        echo '</div>';
 		}
-
+                 //Arrosage taske central
                 foreach (eqLogic::byType('arrosage_tasker') as $eqLogic) {
                         echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
                         echo "<center>";
@@ -75,6 +84,7 @@ $eqLogics = eqLogic::byType('arrosage');
     <legend><i class="fa fa-table"></i>{{Mes zones}}</legend>
     <div class="eqLogicThumbnailContainer">
 	<?php
+                //list all zone
 		foreach ($eqLogics as $eqLogic) {
 			echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 			echo "<center>";
