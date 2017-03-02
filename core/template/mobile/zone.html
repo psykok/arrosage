@@ -2,8 +2,16 @@
  <center class="widget-name"><strong><a href="#eqLink#" style="font-size : 1.1em;"> #zoneName# </a></strong></center>
 
 <center>
-	<img style="height:90px;width:90px; display: #visibilityImage#;" src="plugins/arrosage/core/template/images/#cmd_stat#.png"/>
+<div class="cmd" data-type="action" data-subtype="other" data-cmd_id="#id#" data-cmd_uid="#uid#">
+        <img class="zoneAction" style="height:90px;width:90px; display: #visibilityImage#;" src="plugins/arrosage/core/template/images/#cmd_stat#.png"/>
+</div>
 </center>
+<script>
+        $('.cmd[data-cmd_id=#id#] .zoneAction').on('click', function () {
+            jeedom.cmd.execute({id: '#zoneActionID#'});
+      });
+
+</script>
 
 </div>
 
