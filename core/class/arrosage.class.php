@@ -125,13 +125,16 @@ class arrosage extends eqLogic {
 	       // }
 	}
 	foreach (cmd::byLogicalId('task') as $cmdTask) {
-		
+	       
+                	
         	$startTime =  $cmdTask->getConfiguration('startTime');
         	$disableTask = $cmdTask->getConfiguration('cbDisable');
         	$startDay = "";
         	$startMonth = "";
 		$duration="";
 		$cmdName = $cmdTask->getName();
+
+                log::add('arrosage', 'debug','cron : task : '.$cmdName );
 
 
         	 //if the task is disable exit
@@ -166,9 +169,10 @@ class arrosage extends eqLogic {
         	        }
         	 }
 	
-		//crete start time and add delay	
+		//crete start time and add delay
+                log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : init start time : ' .  $startTime);	
 		$startTime = date('H:i',strtotime($startTime . '+ '.$startDelay .' minute'));
-	
+                log::add('arrosage', 'debug','cron : zone : '.$zoneName.' : start time with delay: ' .  $startTime);	
 		
 		foreach (eqLogic::byType('arrosage') as $eqLogic) {
 			if( $eqLogic->getConfiguration($cmdTask->getName()) == 1){
