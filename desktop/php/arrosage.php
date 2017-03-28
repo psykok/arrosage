@@ -172,7 +172,7 @@ $eqLogics = eqLogic::byType('arrosage');
               		      </div>
    	      		      <div class="input-group"  style="width : 180px;">	
 	      		      	<div class="input-group-addon" >{{Max}}</div>
-              		      	<input class="eqLogicAttr form-control" type="number" min="0" data-l1key="configuration" data-l2key="windSpeedMax" placeholder="{{10}}">
+              		      	<input class="eqLogicAttr form-control" type="number" min="0" data-l1key="configuration" data-l2key="windSpeedMax" >
 	      		      	<div class="input-group-addon">km/h</div>
 	      		      </div>
               		  </div>
@@ -188,11 +188,11 @@ $eqLogics = eqLogic::byType('arrosage');
 
              		       <div class="input-group"  style="width : 340px;">
              		           <div class="input-group-addon" >{{Min}}</div>
-             		           <input class="eqLogicAttr form-control" type="number" min="0" max="100" data-l1key="configuration" data-l2key="moistureMin" placeholder="{{10}}">
+             		           <input class="eqLogicAttr form-control" type="number" min="0" max="100" data-l1key="configuration" data-l2key="moistureMin" >
              		           <div class="input-group-addon">%</div>
 	     		   	<div style="margin-left : 15px;"></div>
 	     		   	 <div class="input-group-addon">{{Max}}</div>
-             		           <input class="eqLogicAttr form-control" type="number" min="0" max="100" data-l1key="configuration" data-l2key="moistureMax" placeholder="{{10}}">
+             		           <input class="eqLogicAttr form-control" type="number" min="0" max="100" data-l1key="configuration" data-l2key="moistureMax" >
              		           <div class="input-group-addon">%</div>
              		       </div>
              		 </div>
@@ -222,7 +222,7 @@ $eqLogics = eqLogic::byType('arrosage');
 
              		       <div class="input-group"  style="width : 160px;">
              		           <div class="input-group-addon" >{{Max}}</div>
-             		           <input class="eqLogicAttr form-control" type="number" min="0" max="100" data-l1key="configuration" data-l2key="uvMax" placeholder="{{10}}">
+             		           <input class="eqLogicAttr form-control" type="number" min="0" max="100" data-l1key="configuration" data-l2key="uvMax">
              		           <div class="input-group-addon">%</div>
              		       </div>
              		 </div>
@@ -269,7 +269,7 @@ $eqLogics = eqLogic::byType('arrosage');
                 	    <label class="col-sm-2 control-label">{{Durée}}</label>
                 	    <div class="col-sm-2">
                 	    <div class="input-group"  style="width : 150px;">
-                	        <input class="eqLogicAttr form-control" type="number" min="5" step="5" data-l1key="configuration" data-l2key="zoneDuration" placeholder="{{5}}">
+                	        <input class="eqLogicAttr form-control" type="number" min="5" step="5" data-l1key="configuration" data-l2key="zoneDuration">
                 	        <div class="input-group-addon">min</div>
                 	    </div>
 			    </div>

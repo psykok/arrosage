@@ -577,6 +577,9 @@ class arrosage extends eqLogic {
                 if ($this->getConfiguration('moistureStop') == 1){
                         $moistureMaxValue = $this->getConfiguration('moistureMax');
                         $moistureMinValue = $this->getConfiguration('moistureMin');
+			if ($moistureMinValue == "" || $moistureMaxValue == ""){
+                                throw new Exception(__('L\'humidité min et l\'humidité max ne peuvent pas être vide', __FILE__));
+                        }
 
                         if ($moistureMinValue < 0 || $moistureMinValue > $moistureMaxValue){
                                 throw new Exception(__('L\'humidité min doit être superieur à 0% et inférieur à l\'humidité max', __FILE__));
@@ -590,10 +593,22 @@ class arrosage extends eqLogic {
                if ($this->getConfiguration('windStop') == 1){
 
                         $windMaxValue = $this->getConfiguration('windSpeedMax');
-
+                        if (  $windMaxValue == "" ){
+                                throw new Exception(__('La vitesse du vent max ne peut pas être vide' ,  __FILE__));
+                        }
                         if (  $windMaxValue < 1 ){
                                 throw new Exception(__('La vitesse du vent max doit être superieur à 0km/h ' , __FILE__));
+                        }
 
+                }
+               if ($this->getConfiguration('uvStop') == 1){
+
+                        $uvMaxValue = $this->getConfiguration('uvMax');
+                        if (  $uvMaxValue == "" ){
+                                throw new Exception(__('UV max ne peut pas être vide' ,  __FILE__));
+                        }
+                        if (  $uvMaxValue < 1 ){
+                                throw new Exception(__('UV max doit être superieur à 0% ' , __FILE__));
                         }
 
                 }

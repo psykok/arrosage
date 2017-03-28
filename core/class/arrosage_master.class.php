@@ -95,7 +95,11 @@ class arrosage_master extends eqLogic {
 
                 //check if the water adjustement is not negative or greater as 100
 		$waterAdjValue = $this->getConfiguration('waterAdj');
+		
 
+		if ($waterAdjValue == ""){
+                              throw new Exception(__('Le coef d\'arrosage ne peut pas être vide', __FILE__));
+                }
                 if ($waterAdjValue < 0){
                               throw new Exception(__('Le coef d\'arrosage doit etre superieur ou égal 0%', __FILE__));
                 }
@@ -106,11 +110,10 @@ class arrosage_master extends eqLogic {
 		//check if the delay time is not negative
                  $delayAdjValue = $this->getConfiguration('delayAdj');
 
-                 if (  $delayAdjValue < 0 ){
+                 if (  ($delayAdjValue < 0) || ($delayAdjValue == "" )){
                          throw new Exception(__('Le reatard doit être superieur ou égal à 0 min ' , __FILE__));
 
                  }
-
 
 
         }

@@ -57,7 +57,7 @@
 			<div class="form-group">
 		                <label class="col-sm-2 control-label">{{Coef arrosage : }}</label>
         		 	<div class="col-sm-2">
-		        		<input class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="waterAdj" placeholder="{{100}}" style="margin-bottom : 5px;width : 45px; display : inline-block;">
+		        		<input class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="waterAdj" style="margin-bottom : 5px;width : 45px; display : inline-block;">
         				 <label class="control-label" style="display : inline-block;">{{%}}</label>
 	        		</div>
                         </div>
@@ -65,7 +65,7 @@
                         <div class="form-group">
                         <label class="col-sm-2 control-label">{{Retard arrosage : }}</label>
 			<div class="col-sm-2">
-                                        <input class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="delayAdj" placeholder="{{0}}" style="margin-bottom : 5px;width : 45px; display : inline-block;">
+                                        <input class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="delayAdj" style="margin-bottom : 5px;width : 45px; display : inline-block;">
                                          <label class="control-label" style="display : inline-block;">{{min}}</label>
                                 </div>
 
