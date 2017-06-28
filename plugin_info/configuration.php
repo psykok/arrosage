@@ -56,7 +56,7 @@ if (!isConnect()) {
    <div class="form-group">
           <label class="col-sm-2 control-label">{{Master Vanne}}</label>
           <div class="col-sm-2">
-          <input type="checkbox" class="configKey bootstrapSwitch" data-l1key='masterValve' />
+          <input type="checkbox" class="configKey" data-l1key='masterValve' />
           </div>
 
    </div>
