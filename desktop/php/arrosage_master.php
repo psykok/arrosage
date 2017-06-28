@@ -27,8 +27,8 @@
                    <div class="form-group">
                      <label class="col-sm-4 control-label"></label>
                      <div class="col-sm-8">
-                        <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Activer}}" data-l1key="isEnable" checked/>
-                        <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Visible}}" data-l1key="isVisible" checked/>
+			<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr " data-label-text="{{Activer}}" data-l1key="isEnable" checked/>{{Activer}}</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr " data-label-text="{{Visible}}" data-l1key="isVisible" checked/>{{Visible}}</label>
                      </div>
                    </div>
                 </fieldset>
@@ -42,14 +42,14 @@
 		       <div class="form-group">
 		                <label class="col-sm-2 control-label">{{Arrêt général}}</label>
 		                <div class="col-sm-6">
-		                    <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='masterStop' />
+		                    <input type="checkbox" class="eqLogicAttr " data-l1key='configuration' data-l2key='masterStop' />
 		       		</div>
 		       </div>
 
                        <div class="form-group">
                                 <label class="col-sm-2 control-label">{{Check météo}}</label>
                                 <div class="col-sm-6">
-                                    <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='checkWeather' />
+                                    <input type="checkbox" class="eqLogicAttr " data-l1key='configuration' data-l2key='checkWeather' />
                                 </div>
                        </div>
 
@@ -74,7 +74,7 @@
 			 <div class="form-group">
                                 <label class="col-sm-2 control-label">{{Pluie hier}}</label>
                                 <div class="col-sm-6">
-                                    <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='rainYD' />
+                                    <input type="checkbox" class="eqLogicAttr " data-l1key='configuration' data-l2key='rainYD' />
                                 </div>
                        </div>
 

@@ -127,8 +127,8 @@ $eqLogics = eqLogic::byType('arrosage');
                     			 <div class="form-group">
                     			  <label class="col-sm-4 control-label"></label>
                     			  <div class="col-sm-8">
-                    			    <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Activer}}" data-l1key="isEnable" checked/>
-                    			    <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Visible}}" data-l1key="isVisible" checked/>
+                    			    <input type="checkbox" class="eqLogicAttr " data-label-text="{{Activer}}" data-l1key="isEnable" checked/>
+                    			    <input type="checkbox" class="eqLogicAttr " data-label-text="{{Visible}}" data-l1key="isVisible" checked/>
                     			 </div>
                    			</div>
 				</fieldset>
@@ -153,14 +153,14 @@ $eqLogics = eqLogic::byType('arrosage');
                 <div class="form-group">
                     <label class="col-sm-2 control-label">{{Hivernage}}</label>
                     <div class="col-sm-6">
-                    <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='winterMode' />
+                    <input type="checkbox" class="eqLogicAttr " data-l1key='configuration' data-l2key='winterMode' />
                     </div>
                 </div>
 
               <div class="form-group">
                     <label class="col-sm-2 control-label">{{Arret si pluie}}</label>
                     <div class="col-sm-6">
-                    <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='rainStop' />
+                    <input type="checkbox" class="eqLogicAttr " data-l1key='configuration' data-l2key='rainStop' />
                     </div>
                 </div>
 
@@ -168,7 +168,7 @@ $eqLogics = eqLogic::byType('arrosage');
               		<div class="form-group">
               		      <label class="col-sm-2 control-label">{{Arret si vent}}</label>
               		      <div class="col-sm-2">
-              		      	<input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='windStop' />
+              		      	<input type="checkbox" class="eqLogicAttr " data-l1key='configuration' data-l2key='windStop' />
               		      </div>
    	      		      <div class="input-group"  style="width : 180px;">	
 	      		      	<div class="input-group-addon" >{{Max}}</div>
@@ -183,7 +183,7 @@ $eqLogics = eqLogic::byType('arrosage');
              		<div class="form-group">
              		       <label class="col-sm-2 control-label">{{Arret humidité}}</label>
              		       <div class="col-sm-2">
-             		       	<input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='moistureStop' />
+             		       	<input type="checkbox" class="eqLogicAttr " data-l1key='configuration' data-l2key='moistureStop' />
 	     		       </div>
 
              		       <div class="input-group"  style="width : 340px;">
@@ -210,7 +210,7 @@ $eqLogics = eqLogic::byType('arrosage');
              		<div class="form-group">
              		       <label class="col-sm-2 control-label">{{Arret UV }}</label>
              		       <div class="col-sm-2">
-             		       <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-l1key='configuration' data-l2key='uvStop' />
+             		       <input type="checkbox" class="eqLogicAttr " data-l1key='configuration' data-l2key='uvStop' />
              		       </div>
 <!--
              		        <div class="col-sm-2">

@@ -3,7 +3,10 @@
         <div class="col-sm-6">
             <form class="form-horizontal">
                 <fieldset>
-                    <legend><i class="fa fa-arrow-circle-left eqLogicAction cursor" data-action="returnToThumbnailDisplay"></i> {{G√©n√©ral}}<i class='fa fa-cogs eqLogicAction pull-right cursor expertModeVisible' data-action='configure'></i></legend>
+                    <legend>
+			<i class="fa fa-arrow-circle-left eqLogicAction cursor" data-action="returnToThumbnailDisplay"></i> {{G√©n√al©r}}
+			<i class='fa fa-cogs eqLogicAction pull-right cursor expertModeVisible' data-action='configure'></i>
+		   </legend>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">{{Nom}}</label>
                         <div class="col-sm-6">
@@ -27,8 +30,8 @@
                    <div class="form-group">
                      <label class="col-sm-4 control-label"></label>
                      <div class="col-sm-8">
-                        <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Activer}}" data-l1key="isEnable" checked/>
-                        <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Visible}}" data-l1key="isVisible" checked/>
+ 			<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr " data-label-text="{{Activer}}" data-l1key="isEnable" checked/>{{Activer}}</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr " data-label-text="{{Visible}}" data-l1key="isVisible" checked/>{{Visible}}</label>
                      </div>
                    </div>
                 </fieldset>
