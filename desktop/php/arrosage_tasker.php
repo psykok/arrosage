@@ -62,7 +62,11 @@
 	</div>
 </div>
 <div role="tabpanel" class="tab-pane" id="tasktab">
+<div>
   <br/>
+<div class="alert alert-danger">{{En raison d'un bug, toujours sauvegarder deux fois lors d'un ajout ou d'une modification de tâche.}} </div>
+</div>
+</br>
 <a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{Ajouter une commande}}</a><br/><br/>
 <table id="table_cmd" class="table table-bordered table-condensed">
     <thead>
@@ -74,8 +78,11 @@
 
     </tbody>
 </table>
+</div>
 
+</div>
 
 </div>
 
 </div>
+
