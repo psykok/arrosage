@@ -4,17 +4,16 @@
  <a class="btn btn-default eqLogicAction pull-right" data-action="configure"><i class="fa fa-cogs"></i> {{Configuration avancée}}</a>
  <ul class="nav nav-tabs" role="tablist">
   <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
-  <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
-  <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
+  <li role="presentation" class="active"><a href="#taskereqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
+  <li role="presentation"><a href="#tasktab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Taches}}</a></li>
 </ul>
-    <div class='row'>
+<div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
+  <div role="tabpanel" class="tab-pane active" id="taskereqlogictab">
+    <br/>
         <div class="col-sm-6">
             <form class="form-horizontal">
                 <fieldset>
-                    <legend>
-			<i class="fa fa-arrow-circle-left eqLogicAction cursor" data-action="returnToThumbnailDisplay"></i> {{GÃ©nÃal©r}}
-			<i class='fa fa-cogs eqLogicAction pull-right cursor expertModeVisible' data-action='configure'></i>
-		   </legend>
+			</br>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">{{Nom}}</label>
                         <div class="col-sm-6">
@@ -62,8 +61,8 @@
 	    </form>
 	</div>
 </div>
-
-<legend>{{Tache}}</legend>
+<div role="tabpanel" class="tab-pane" id="tasktab">
+  <br/>
 <a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{Ajouter une commande}}</a><br/><br/>
 <table id="table_cmd" class="table table-bordered table-condensed">
     <thead>
@@ -77,5 +76,6 @@
 </table>
 
 
+</div>
 
 </div>

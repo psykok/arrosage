@@ -3,15 +3,16 @@
 <!-- <a class="btn btn-danger eqLogicAction pull-right" data-action="remove"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a>-->
  <a class="btn btn-default eqLogicAction pull-right" data-action="configure"><i class="fa fa-cogs"></i> {{Configuration avanc�e}}</a>
  <ul class="nav nav-tabs" role="tablist">
-  <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
-  <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
-  <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
+  <li role="presentation"><a href="#eqlogictab" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
+  <li role="presentation" class="active"><a href="#mastereqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
+  <li role="presentation"><a href="#mastercmdtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
 </ul>
-    <div class='row'>
+<div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;" >
+  <div role="tabpanel" class="tab-pane active" id="mastereqlogictab">
         <div class="col-sm-6">
             <form class="form-horizontal">
                 <fieldset>
-                    <legend><i class="fa fa-arrow-circle-left eqLogicAction cursor" data-action="returnToThumbnailDisplay"></i> {{Général}}<i class='fa fa-cogs eqLogicAction pull-right cursor expertModeVisible' data-action='configure'></i></legend>
+		    </br>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">{{Nom}}</label>
                         <div class="col-sm-6">
@@ -91,6 +92,8 @@
 	</div>
 </div>
 
+<div role="tabpanel" class="tab-pane" id="mastercmdtab">
+  <br/>
 <legend>{{Command}}</legend>
 <!--<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{command}}</a><br/><br/>-->
 <table id="table_cmd_master" class="table table-bordered table-condensed">
@@ -103,5 +106,7 @@
 
     </tbody>
 </table>
+</div>
+</div>
 
 </div>
