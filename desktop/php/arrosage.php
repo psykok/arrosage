@@ -305,7 +305,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
     </form>
 </div>
 <div role="tabpanel" class="tab-pane" id="commandtab">
-
+</br>
 <!--<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{command}}</a><br/><br/>-->
 <table id="table_cmd_zone" class="table table-bordered table-condensed">
     <thead>

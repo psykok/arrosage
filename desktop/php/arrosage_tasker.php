@@ -4,11 +4,11 @@
  <a class="btn btn-default eqLogicAction pull-right" data-action="configure"><i class="fa fa-cogs"></i> {{Configuration avancée}}</a>
  <ul class="nav nav-tabs" role="tablist">
   <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
-  <li role="presentation" class="active"><a href="#taskereqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
-  <li role="presentation"><a href="#tasktab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Taches}}</a></li>
+  <li role="presentation"><a href="#taskereqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
+  <li role="presentation" class="active"><a href="#tasktab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Taches}}</a></li>
 </ul>
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
-  <div role="tabpanel" class="tab-pane active" id="taskereqlogictab">
+  <div role="tabpanel" class="tab-pane" id="taskereqlogictab">
     <br/>
         <div class="col-sm-6">
             <form class="form-horizontal">
@@ -61,7 +61,7 @@
 	    </form>
 	</div>
 </div>
-<div role="tabpanel" class="tab-pane" id="tasktab">
+<div role="tabpanel" class="tab-pane active" id="tasktab">
 <div>
   <br/>
 <div class="alert alert-danger">{{En raison d'un bug, toujours sauvegarder deux fois lors d'un ajout ou d'une modification de tÃ¢che.}} </div>

@@ -94,7 +94,6 @@
 
 <div role="tabpanel" class="tab-pane" id="mastercmdtab">
   <br/>
-<!--<legend>{{Command}}</legend>-->
 <!--<a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{command}}</a><br/><br/>-->
 <table id="table_cmd_master" class="table table-bordered table-condensed">
     <thead>

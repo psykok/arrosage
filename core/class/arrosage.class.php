@@ -616,7 +616,7 @@ class arrosage extends eqLogic {
 
 		//check if the duration is greater as 3 	
 		$zoneDurationValue=$this->getConfiguration('zoneDuration');
-		if ( $zoneDurationValue < 2 && $zoneDurationValue != ''){
+		if ( $zoneDurationValue < 4 && $zoneDurationValue != ''){
 			 throw new Exception(__($zoneDurationValue.'La durée doit être superieur à 3min' , __FILE__));
 		}
 		
@@ -628,6 +628,7 @@ class arrosage extends eqLogic {
         } 
 */
   	public function postInsert(){
+		log::add('arrosage', 'debug','arrosage : postInsert' );
         //        if(count(cmd::byLogicalId('winter')) == 0) {
 			$this->createCustomCmd('winter');
 			$this->createCustomCmd('rain');
@@ -640,6 +641,7 @@ class arrosage extends eqLogic {
         }
 
 	public function createCustomCmd($cmdName){
+		log::add('arrosage', 'debug','arrosage : createCustomCmd : '.$cmdName );
 		$masterCmd = new arrosageCmd();
                 $masterCmd->setName($cmdName);
                 $masterCmd->setLogicalId($cmdName);
