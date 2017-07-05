@@ -91,6 +91,9 @@ class arrosage_tasker extends eqLogic {
 
 class arrosage_taskerCmd extends cmd {
 
+	#public function postInsert() {
+	#	log::add('arrosage', 'debug','arrosage_tasker : cmd : #################################' );
+	#}
 	  public function preSave() {
 
               log::add('arrosage', 'info','type cmd : '. $this->getEqType_name() );

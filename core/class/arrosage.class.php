@@ -448,9 +448,10 @@ class arrosage extends eqLogic {
 
 
   public function postSave(){
+        log::add('arrosage', 'debug','arrosage : postsSave');
+
 	$this->createMasterControl();
 	$this->createTasker();
-
   }
 
 
@@ -628,7 +629,8 @@ class arrosage extends eqLogic {
         } 
 */
   	public function postInsert(){
-		log::add('arrosage', 'debug','arrosage : postInsert' );
+
+		log::add('arrosage', 'debug','arrosage : postInsert : Commad creation' );
         //        if(count(cmd::byLogicalId('winter')) == 0) {
 			$this->createCustomCmd('winter');
 			$this->createCustomCmd('rain');
@@ -636,6 +638,10 @@ class arrosage extends eqLogic {
 			$this->createCustomCmd('moisture');
 			$this->createCustomCmd('zoneAction');			
           //      }
+	}
+	public function preInsert(){
+                log::add('arrosage', 'debug','arrosage : preInsert : Set dureation to 5min by default' );
+		$this->setConfiguration("zoneDuration",5);
 
 
         }

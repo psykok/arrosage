@@ -10,7 +10,7 @@
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
   <div role="tabpanel" class="tab-pane" id="taskereqlogictab">
     <br/>
-        <div class="col-sm-6">
+        <div class="">
             <form class="form-horizontal">
                 <fieldset>
 			</br>
@@ -45,13 +45,13 @@
             </form>
         </div>
 
-	 <div class="col-sm-6 " id="arrosage_config">
+	 <div class="" id="arrosage_config">
 	     <form class="form-horizontal">
 	        <fieldset>
 	               <legend>{{Configuration}}</legend>
 			 <div class="form-group">
                                 <label class="col-sm-2 control-label">{{Temps entre zone : }}</label>
-                                <div class="col-sm-2">
+                                <div class="col-sm-6">
                                         <input class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="delayBtwZone"  type="number" min="0" max="5" placeholder="{{0}}" style="margin-bottom : 5px;width : 45px; display : inline-block;">
 
                                          <label class="control-label" style="display : inline-block;">{{min}}</label>

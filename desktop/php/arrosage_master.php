@@ -9,7 +9,7 @@
 </ul>
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;" >
   <div role="tabpanel" class="tab-pane active" id="mastereqlogictab">
-        <div class="col-sm-6">
+        <div class="">
             <form class="form-horizontal">
                 <fieldset>
 		    </br>
@@ -44,7 +44,7 @@
             </form>
         </div>
 
-	 <div class="col-sm-6 " id="arrosage_config">
+	 <div class="" id="arrosage_config">
 	     <form class="form-horizontal">
 	        <fieldset>
 	               <legend>{{Configuration Centrale}}</legend>
