@@ -27,6 +27,10 @@ class arrosage extends eqLogic {
 
   public static function cron() {
 	log::add('arrosage', 'debug','cron : log start' );
+	
+	//init variable to be sure to not empty ones
+	$waterAdj=100;
+	$startDelay=0;
 
 	  //get water adj value and apply startup delay
 	log::add('arrosage', 'debug','cron : get value from eqLogic Master' );
@@ -450,8 +454,8 @@ class arrosage extends eqLogic {
   public function postSave(){
         log::add('arrosage', 'debug','arrosage : postsSave');
 
-	#$this->createMasterControl();
-	#$this->createTasker();
+	$this->createMasterControl();
+	$this->createTasker();
   }
 
 

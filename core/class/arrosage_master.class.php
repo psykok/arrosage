@@ -108,12 +108,12 @@ class arrosage_master extends eqLogic {
                 }
 
 		//check if the delay time is not negative
-                 $delayAdjValue = $this->getConfiguration('delayAdj');
+                // $delayAdjValue = $this->getConfiguration('delayAdj');
 
-                 if (  ($delayAdjValue < 0) || ($delayAdjValue == "" )){
-                         throw new Exception(__('Le reatard doit être superieur ou égal à 0 min ' , __FILE__));
+              //   if (($delayAdjValue == "" )){
+              //           throw new Exception(__('retard doit être superieur ou égal à 0 min ' , __FILE__));
 
-                 }
+              //   }
 
 
         }

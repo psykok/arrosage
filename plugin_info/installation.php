@@ -18,6 +18,9 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 
 function arrosage_remove() {
+        log::add('arrosage', 'debug','############### create_remove : remove all object');
+
+	
 	foreach (eqLogic::byType('arrosage') as $obMaster) {
                 $obMaster->remove();
         }
@@ -34,6 +37,9 @@ function arrosage_remove() {
 	
 }
 function arrosage_install() {
+        log::add('arrosage', 'debug','############### create_remove : create all sub classes all');
+
+
 	  $eqLogic = new arrosage_master();
           $eqLogic->setEqType_name('arrosage_master');
           $eqLogic->setName('Centrale');
