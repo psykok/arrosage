@@ -18,6 +18,10 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 
 function arrosage_remove() {
+	foreach (eqLogic::byType('arrosage') as $obMaster) {
+                $obMaster->remove();
+        }
+
 	#remove arrosage master eqLogic
       	foreach (eqLogic::byType('arrosage_master') as $obMaster) {
 		$obMaster->remove();
@@ -28,5 +32,32 @@ function arrosage_remove() {
                 $obMaster->remove();
         }
 	
+}
+function arrosage_install() {
+	  $eqLogic = new arrosage_master();
+          $eqLogic->setEqType_name('arrosage_master');
+          $eqLogic->setName('Centrale');
+          $eqLogic->setLogicalId($this->getId().'_centrale');
+          $eqLogic->setObject_id($this->getObject_id());
+          $eqLogic->setConfiguration('waterAdj',100);
+          $eqLogic->setConfiguration('delayAdj',0);
+          $eqLogic->setConfiguration('masterStop',0);
+          $eqLogic->setIsVisible(1);
+          $eqLogic->setIsEnable(1);
+          $eqLogic->save();
+          log::add('arrosage', 'debug','createMasterControl : master controle cereated');
+
+
+
+
+          $eqLogic = new arrosage_tasker();
+          $eqLogic->setEqType_name('arrosage_tasker');
+          $eqLogic->setName('Tasker');
+          $eqLogic->setLogicalId($this->getId().'_tasker');
+          $eqLogic->setObject_id($this->getObject_id());
+          $eqLogic->setIsVisible(1);
+          $eqLogic->setIsEnable(1);
+          $eqLogic->save();
+          log::add('arrosage', 'debug','createTasker : tasker created');	
 }
 ?>

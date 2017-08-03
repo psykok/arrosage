@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
- */
+§§*/
 
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
@@ -450,8 +450,8 @@ class arrosage extends eqLogic {
   public function postSave(){
         log::add('arrosage', 'debug','arrosage : postsSave');
 
-	$this->createMasterControl();
-	$this->createTasker();
+	#$this->createMasterControl();
+	#$this->createTasker();
   }
 
 
