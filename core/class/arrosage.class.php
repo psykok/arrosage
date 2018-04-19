@@ -52,6 +52,7 @@ class arrosage extends eqLogic {
        log::add('arrosage', 'debug','cron : check if master standby is active' );
        if ( $standbyValue == 1){
               log::add('arrosage', 'info','cron : master standby on' );
+	      
               return 1;
        }
 
@@ -304,6 +305,7 @@ class arrosage extends eqLogic {
 				                //if rain exit
 				                if ($weatherInt == 1){
 				                        log::add('arrosage', 'info','weather prevision : enough rain, no irrigation needed ');
+							$this->getEqLogic()->doNotification('arrosage : weather prevision','enough rain, no irrigation needed');
 				                        //return 1;
 				                }else{
 
@@ -312,6 +314,7 @@ class arrosage extends eqLogic {
    			                    		   //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
 
 					    		    log::add('arrosage', 'info','cron : zone : '.$zoneName.' : zone on');
+							    $this->getEqLogic()->doNotification('arrosage : zone : '.$zoneName.' : zone on');
 
    			                    		    $eqLogic->manageValve('On');
 					    		    
@@ -721,6 +724,17 @@ class arrosage extends eqLogic {
                 $this->save();
                 $this->refreshWidget();
         }
+	public function doNotification($title,$message) {
+                $notifDevice=config::byKey('notifDev','arrosage');
+
+                             log::add('arrosage', 'debug','notification : device string : '.$notifDevice);
+
+                if ($notifDevice != ''){
+                        $notifCmd=cmd::byString($notifDevice);
+			     log::add('arrosage', 'debug','notification : title : '.$title );
+                        $notifCmd->execCmd($options=array('title'=>$title, 'message'=> $message));
+                }
+        }
 
 
 }
@@ -729,7 +743,8 @@ class arrosageCmd extends cmd {
 
         public function execute($_options = array()) {
                 if ($this->getLogicalId() == 'winter') {                                                                                                                                                 
-                        $this->getEqLogic()->doWinter();                                                                                                       
+                        $this->getEqLogic()->doWinter();
+                      //  $this->getEqLogic()->doNotification('test','test2');                                                                                                        
                 }                                                                                                                                                                                         
                                                                                                                                                                 
                 if ($this->getLogicalId() == 'rain') {                                                                                                                                                   
