@@ -107,6 +107,17 @@ if (!isConnect()) {
 
     </div>
 
+ <div class="form-group">
+          <label class="col-sm-2 control-label">{{Notification}}</label>
+          <div class="col-sm-6">
+
+                  <input class="configKey form-control input-sm"  data-l1key="notifDev" placeholder="{{Nom Commande de notification }}" style="margin-bottom : 5px;width : 300px; display : inline-block;">
+                  <a class="btn btn-default btn-sm cursor pluginNotifDev" data-input="infoName" style="margin-left : 5px;"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>
+
+          </div>
+
+    </div>
+
   <script>
 	
 
@@ -131,6 +142,7 @@ if (!isConnect()) {
         searchEquipment ("#rain_config",".valveOffAction","masterValveOff","action");
         searchEquipment ("#rain_config",".valveStatusInfo","masterValveStatus","info");
         searchEquipment ("#rain_config",".pluginWeatherH1","weatherH1","info");
+        searchEquipment ("#rain_config",".pluginNotifDev","notifDev","action");
 
 
 
