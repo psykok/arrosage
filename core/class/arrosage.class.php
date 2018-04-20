@@ -305,7 +305,7 @@ class arrosage extends eqLogic {
 				                //if rain exit
 				                if ($weatherInt == 1){
 				                        log::add('arrosage', 'info','weather prevision : enough rain, no irrigation needed ');
-							$this->getEqLogic()->doNotification('arrosage : weather prevision','enough rain, no irrigation needed');
+							$this->doNotification('arrosage : weather prevision','enough rain, no irrigation needed');
 				                        //return 1;
 				                }else{
 
@@ -314,10 +314,10 @@ class arrosage extends eqLogic {
    			                    		   //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
 
 					    		    log::add('arrosage', 'info','cron : zone : '.$zoneName.' : zone on');
-							    $this->getEqLogic()->doNotification('arrosage : zone : '.$zoneName.' : zone on');
+							    $this->doNotification('arrosage : zone : '.$zoneName.' : zone on');
 
    			                    		    $eqLogic->manageValve('On');
-					    		    
+								    		    
 					    		    //save start and stop time in the zone configuration
 					    		    $eqLogic->setConfiguration('startTime',$startTime);
 					    		    $eqLogic->setConfiguration('stopTime',$stopTime);
@@ -341,8 +341,8 @@ class arrosage extends eqLogic {
    			                     //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOff')." at ".$stopTime );
 	
 						log::add('arrosage', 'info','cron : zone : '.$zoneName.' : zone off');
-
-   			                      $eqLogic->manageValve('Off');
+                                              	$this->doNotification('arrosage : zone : '.$zoneName.' : zone off');
+   			                      	$eqLogic->manageValve('Off');
 
    			             }
    			          } catch (Exception $exc) {
@@ -669,24 +669,28 @@ class arrosage extends eqLogic {
         public function doWinter(){
                 log::add('arrosage', 'debug','doWinter : command winter' );
 		$this->changeOptionStatus('winterMode');
+		$this->doNotification("arrosage: doWinter","zone : ".$this->getName()." : status has change");
         }    
 
 	//change rain option status                                                                                                                          
         public function doRain(){                                                                                                                                                                     
 		log::add('arrosage', 'debug','doRain : command rain' );
 		$this->changeOptionStatus('rainStop');
+                $this->doNotification("arrosage: doRain","zone : ".$this->getName()." : status has change");
         }    
 
 	//change wind option status                                                                                                                             
         public function doWind(){ 
                 log::add('arrosage', 'debug','doWind : command wind' );
 		$this->changeOptionStatus('windStop');
+                $this->doNotification("arrosage: doWind","zone : ".$this->getName()." : status has change");
         }    
 
 	 //change moisture option status                                                                                                                              
         public function doMoisture(){  
                 log::add('arrosage', 'debug','doMoisture : command moisture' );
 		$this->changeOptionStatus('moistureStop');
+                $this->doNotification("arrosage: doMoisture","zone : ".$this->getName()." : status has change");
         } 
 
 	//activate or desactivate the zone
@@ -703,10 +707,12 @@ class arrosage extends eqLogic {
 
 			//close the valve
                         $this->manageValve('Off');
+                        $this->doNotification("arrosage: doZoneAction","zone ".$this->getName()." off");
                 } else{
 
 			//open the valve
                         $this->manageValve('On');
+                        $this->doNotification("arrosage: doZoneAction","zone ".$this->getName()." on");
 		}
         }
    
@@ -725,15 +731,20 @@ class arrosage extends eqLogic {
                 $this->refreshWidget();
         }
 	public function doNotification($title,$message) {
-                $notifDevice=config::byKey('notifDev','arrosage');
 
-                             log::add('arrosage', 'debug','notification : device string : '.$notifDevice);
 
-                if ($notifDevice != ''){
-                        $notifCmd=cmd::byString($notifDevice);
-			     log::add('arrosage', 'debug','notification : title : '.$title );
-                        $notifCmd->execCmd($options=array('title'=>$title, 'message'=> $message));
-                }
+                                     log::add('arrosage', 'debug','notification : master : '.config::byKey('masterNotif','arrosage'));
+		if ( config::byKey('masterNotif','arrosage')  == 1){
+                	$notifDevice=config::byKey('notifDev','arrosage');
+
+                	             log::add('arrosage', 'debug','notification : device string : '.$notifDevice);
+
+                	if ($notifDevice != ''){
+                	        $notifCmd=cmd::byString($notifDevice);
+				     log::add('arrosage', 'debug','notification : title : '.$title );
+                	        $notifCmd->execCmd($options=array('title'=>$title, 'message'=> $message));
+                	}
+		}
         }
 
 

@@ -106,9 +106,15 @@ if (!isConnect()) {
           </div>
 
     </div>
-
- <div class="form-group">
+<div class="form-group">
           <label class="col-sm-2 control-label">{{Notification}}</label>
+          <div class="col-sm-2">
+          <input type="checkbox" class="configKey" data-l1key='masterNotif' />
+          </div>
+
+   </div>
+ <div class="form-group">
+          <label class="col-sm-2 control-label">{{Notification Command}}</label>
           <div class="col-sm-6">
 
                   <input class="configKey form-control input-sm"  data-l1key="notifDev" placeholder="{{Nom Commande de notification }}" style="margin-bottom : 5px;width : 300px; display : inline-block;">
