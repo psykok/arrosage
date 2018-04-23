@@ -305,7 +305,7 @@ class arrosage extends eqLogic {
 				                //if rain exit
 				                if ($weatherInt == 1){
 				                        log::add('arrosage', 'info','weather prevision : enough rain, no irrigation needed ');
-							$this->doNotification('arrosage : weather prevision','enough rain, no irrigation needed');
+							$eqLogic->doNotification('arrosage : weather prevision','enough rain, no irrigation needed');
 				                        //return 1;
 				                }else{
 
@@ -314,7 +314,7 @@ class arrosage extends eqLogic {
    			                    		   //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOn')." at ".$startTime);
 
 					    		    log::add('arrosage', 'info','cron : zone : '.$zoneName.' : zone on');
-							    $this->doNotification('arrosage : zone : '.$zoneName.' : zone on');
+							    $eqLogic->doNotification('arrosage : zone : '.$zoneName.' : zone on');
 
    			                    		    $eqLogic->manageValve('On');
 								    		    
@@ -341,7 +341,7 @@ class arrosage extends eqLogic {
    			                     //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOff')." at ".$stopTime );
 	
 						log::add('arrosage', 'info','cron : zone : '.$zoneName.' : zone off');
-                                              	$this->doNotification('arrosage : zone : '.$zoneName.' : zone off');
+                                              	$eqLogic->doNotification('arrosage : zone : '.$zoneName.' : zone off');
    			                      	$eqLogic->manageValve('Off');
 
    			             }
