@@ -599,6 +599,11 @@ class arrosage extends eqLogic {
 
 		//check if the wind control has been activated and if the max speed has been defnied
                if ($this->getConfiguration('windStop') == 1){
+			$cmd_device=cmd::byId(trim(config::byKey('windSensor','arrosage'),"#"));
+                        if( $cmd_device == "" ){
+                                throw new Exception(__('Arret si vent ne peut pas etre activÃ sans sonde' ,  __FILE__));
+                                log::add('arrosage', 'debug','arrosage : preSave : cannot ativate wind check without wind sensore' );
+                        }
 
                         $windMaxValue = $this->getConfiguration('windSpeedMax');
                         if (  $windMaxValue == "" ){
@@ -609,6 +614,7 @@ class arrosage extends eqLogic {
                         }
 
                 }
+		//check for uv setup
                if ($this->getConfiguration('uvStop') == 1){
 
                         $uvMaxValue = $this->getConfiguration('uvMax');
@@ -620,7 +626,14 @@ class arrosage extends eqLogic {
                         }
 
                 }
-	
+		
+		if ($this->getConfiguration('rainStop') == 1){
+			$cmd_device=cmd::byId(trim(config::byKey('rainSensor','arrosage'),"#"));
+			if( $cmd_device == "" ){
+				throw new Exception(__('Arret si pluie ne peut pas etre activÃ sans sonde de pluie' ,  __FILE__));
+				log::add('arrosage', 'debug','arrosage : preSave : cannot ativate rain check without rain sensore' );
+			}
+		}
 
 		//check if the duration is greater as 3 	
 		$zoneDurationValue=$this->getConfiguration('zoneDuration');
