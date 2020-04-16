@@ -26,12 +26,12 @@
                         <div class="col-sm-6">
                             <select class="eqLogicAttr form-control" data-l1key="object_id">
                                 <option value="">{{Aucun}}</option>
-                                <?php
-                                        foreach (object::all() as $object) {
-                                                echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
-                                        }
-                                ?>
-                           </select>
+                             <?php
+                                                  foreach (jeeObject::all() as $object) {
+                                                      echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
+                                                  }
+                                                  ?>
+				</select>
                        </div>
                    </div>
                    <div class="form-group">

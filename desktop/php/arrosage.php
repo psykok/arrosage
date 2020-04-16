@@ -124,15 +124,16 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     			<div class="form-group">
                     			    <label class="col-sm-4 control-label" >{{Objet parent}}</label>
                     			    <div class="col-sm-6">
-                    			        <select class="eqLogicAttr form-control" data-l1key="object_id">
-                    			            <option value="">{{Aucun}}</option>
-                    			            	<?php
-		    			    			foreach (object::all() as $object) {
-		    			    				echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
-		    			    			}	
-		    			    		?>
-                    			       </select>
-                    			   </div>
+                    			   
+					        <select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
+			                          <option value="">{{Aucun}}</option>
+			                          <?php
+			                          foreach (jeeObject::all() as $object) {
+			                              echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
+			                          }
+			                          ?>
+                                                </select>
+					    </div>
                     			 </div>
                     			 <div class="form-group">
                     			  <label class="col-sm-4 control-label"></label>
@@ -322,7 +323,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
 </div>
 	<?php include_file('desktop', 'arrosage_master', 'php', 'arrosage'); ?>
-        <?php include_file('desktop', 'arrosage_tasker', 'php', 'arrosage'); ?>
+	 <?php include_file('desktop', 'arrosage_tasker', 'php', 'arrosage'); ?>
 </div>
 
 <?php
