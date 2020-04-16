@@ -341,7 +341,7 @@ class arrosage extends eqLogic {
    			                     //log::add('arrosage', 'info','Command on '. $eqLogic->getConfiguration('zoneOff')." at ".$stopTime );
 	
 						log::add('arrosage', 'info','cron : zone : '.$zoneName.' : zone off');
-                                              	$eqLogic->doNotification('arrosage : zone : '.$zoneName.' : zone off');
+                                              	$eqLogic->doNotification('arrosage : zone : '.$zoneName,'zone off');
    			                      	$eqLogic->manageValve('Off');
 
    			             }
