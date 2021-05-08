@@ -14,18 +14,18 @@ $eqLogics = eqLogic::byType($plugin->getId());
                 <a class="btn btn-default eqLogicAction" style="width : 100%;margin-top : 5px;margin-bottom: 5px;" data-action="add"><i class="fa fa-plus-circle"></i> {{Ajouter Zone}}</a>
                 <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
                 <?php
-			//Arrosage zone
-			foreach ($eqLogics as $eqLogic) {
-				echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
-			}
-                        //Arroasge master control
-			foreach (eqLogic::byType('arrosage_master') as $eqLogic) {
-				echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage_master"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
-			}
-			//Arrosage taske central
-			foreach (eqLogic::byType('arrosage_tasker') as $eqLogic) {
-                                echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage_tasker"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
-                        }
+			#//Arrosage zone
+			#foreach ($eqLogics as $eqLogic) {
+			#	echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
+			#}
+                        #//Arroasge master control
+			#foreach (eqLogic::byType('arrosage_master') as $eqLogic) {
+			#	echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage_master"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
+			#}
+			#//Arrosage taske central
+			#foreach (eqLogic::byType('arrosage_tasker') as $eqLogic) {
+                        #        echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" data-eqLogic_type="arrosage_tasker"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
+                        #}
 		?>
            </ul>
        </div>
@@ -58,24 +58,24 @@ $eqLogics = eqLogic::byType($plugin->getId());
   </div>
 
 	<?php
-		//Arroasge master control
-		foreach (eqLogic::byType('arrosage_master') as $eqLogic) {
-		        echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
-		        echo "<center>";
-		        echo '<img src="plugins/arrosage/doc/images/master_icon.png" height="105" width="95" />';
-		        echo "</center>";
-		        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
-		        echo '</div>';
-		}
-                 //Arrosage taske central
-                foreach (eqLogic::byType('arrosage_tasker') as $eqLogic) {
-                        echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
-                        echo "<center>";
-                        echo '<img src="plugins/arrosage/doc/images/master_icon.png" height="105" width="95" />';
-                        echo "</center>";
-                        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
-                        echo '</div>';
-                }
+		#//Arroasge master control
+		#foreach (eqLogic::byType('arrosage_master') as $eqLogic) {
+		#        echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+		#        echo "<center>";
+		#        echo '<img src="plugins/arrosage/doc/images/master_icon.png" height="105" width="95" />';
+		#        echo "</center>";
+		#        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
+		#        echo '</div>';
+		#}
+                # //Arrosage taske central
+                #foreach (eqLogic::byType('arrosage_tasker') as $eqLogic) {
+                #        echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+                #        echo "<center>";
+                #        echo '<img src="plugins/arrosage/doc/images/master_icon.png" height="105" width="95" />';
+                #        echo "</center>";
+                #        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
+                #        echo '</div>';
+                #}
 	?>
 </div>
 
@@ -285,19 +285,48 @@ $eqLogics = eqLogic::byType($plugin->getId());
                 	    </div>
 			    </div>
                 	</div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">{{Tache}}</label>
-                            <div class="col-sm-2">
-					 <?php
-                                                foreach (cmd::byLogicalId('task') as $cmdTask) {
-						echo '<div>';
-						echo '<label><input class="eqLogicAttr"  data-l1key="configuration" data-l2key="'.$cmdTask->getName().'" type="checkbox" name="startDays" id="mon" valu=="' .  $cmdTask->getId() . '">' .  $cmdTask->getName() . '</label>';
-						echo '</div>';
-						}
-                                         ?>
-			     </div>
-                        </div>
-			
+			<div class="form-group">
+                	    <label class="col-sm-2 control-label">{{Heure de départ}}</label>
+                	    <div class="col-sm-2">
+                	    <div class="input-group"  style="width : 150px;">
+                	        <input class="eqLogicAttr form-control" type="time" data-l1key="configuration" data-l2key="startTime">
+                	    </div>
+			    </div>
+                	</div>
+			<div class="form-group">
+                	    <label class="col-sm-2 control-label">{{Jour}}</label>
+                	    <div class="col-sm-2">
+                	    <div class="input-group"  >
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbDay1" type="checkbox" name="startDays" id="mon" value="1">LUN</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbDay2" type="checkbox" name="startDays" id="tue" value="2">MAR</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbDay3" type="checkbox" name="startDays" id="wed" value="3">MER</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbDay4" type="checkbox" name="startDays" id="thu" value="4">JEU</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbDay5" type="checkbox" name="startDays" id="fri" value="5">VEN</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbDay6" type="checkbox" name="startDays" id="sat" value="6">SAM</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbDay7" type="checkbox" name="startDays" id="sun" value="7">DIM</label>
+
+                	    </div>
+			    </div>
+                	</div>
+			<div class="form-group">
+                	    <label class="col-sm-2 control-label">{{Mois}}</label>
+                	    <div class="col-sm-2">
+                	    <div class="input-group"  >
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth1" type="checkbox" name="startMonth" id="jan" value="1">JAN</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth2" type="checkbox" name="startMonth" id="fev" value="2">FEV</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth3" type="checkbox" name="startMonth" id="mar" value="3">MAR</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth4" type="checkbox" name="startMonth" id="avr" value="4">AVR</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth5" type="checkbox" name="startMonth" id="mai" value="5">MAI</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth6" type="checkbox" name="startMonth" id="jun" value="6">JUN</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth7" type="checkbox" name="startMonth" id="jul" value="7">JUL</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth8" type="checkbox" name="startMonth" id="aou" value="8">AOU</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth9" type="checkbox" name="startMonth" id="sep" value="9">SEP</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth10" type="checkbox" name="startMonth" id="oct" value="10">OCT</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth11" type="checkbox" name="startMonth" id="nov" value="11">NOV</label>
+                               <label class="checkbox-inline" style="margin-right:1em;"><input class="eqLogicAttr" data-l1key="configuration" data-l2key="cbMonth12" type="checkbox" name="startMonth" id="dec" value="12">DEC</label>
+                	    </div>
+			    </div>
+                	</div>
                 </div>
 
 
@@ -322,8 +351,8 @@ $eqLogics = eqLogic::byType($plugin->getId());
 </div>
 
 </div>
-	<?php include_file('desktop', 'arrosage_master', 'php', 'arrosage'); ?>
-	 <?php include_file('desktop', 'arrosage_tasker', 'php', 'arrosage'); ?>
+	<?php #include_file('desktop', 'arrosage_master', 'php', 'arrosage'); ?>
+	 <?php #include_file('desktop', 'arrosage_tasker', 'php', 'arrosage'); ?>
 </div>
 
 <?php
