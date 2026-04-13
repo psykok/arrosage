@@ -133,8 +133,10 @@ class arrosage extends eqLogic {
 	       // }
 	}
 	foreach (eqLogic::byType('arrosage') as $zone) {
-	        log::add('arrosage', 'debug','cron : ############### start' ); 
-	        log::add('arrosage', 'debug','cron : ############### '.$zoneID ); 
+		log::add('arrosage', 'debug','cron : ############### start' ); 
+		#
+		# zoneID need to be fixed
+	        #log::add('arrosage', 'debug','cron : ############### '.$zoneID ); 
                 	
                 $startTime =  $zone->getConfiguration('startTime');
                 $disableTask = $zone->getConfiguration('winterMode');
@@ -467,6 +469,8 @@ class arrosage extends eqLogic {
         $html_forecast = '';
 	$cmd_list = '';
 	$zonePB = '';
+	$startDay = '';
+	$startMonth = '';
 
         $replace['#id#'] = $this->getId();
 	$replace['#eqLink#'] = $this->getLinkToConfiguration();
@@ -486,7 +490,7 @@ class arrosage extends eqLogic {
                  $startDay = $startDay . jddayofweek($i,2);
                }
         }
-         $replace['#days#'] = "Jours : " .$startDay ;
+        $replace['#days#'] = "Jours : " .$startDay ;
 
         //concatenation of the moth we need to start the cron job
         for ($i = 1; $i <= 12 ;$i++)
